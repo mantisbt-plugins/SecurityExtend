@@ -1,27 +1,24 @@
 <?php
 
+require_once('securityextend_api.php');
+
 form_security_validate( 'plugin_SecurityExtend_securityextend_edit' );
 auth_reauthenticate();
 
 access_ensure_global_level(config_get('manage_plugin_threshold'));
 access_ensure_global_level(config_get('edit_threshold_level'));
 
-$t_db_table = plugin_table('config');
+$f_block_bug = gpc_get_string('block_bug');
+$f_block_bug_disable_user = gpc_get_string('block_bug_disable_user');
+$f_block_bug_delete_user = gpc_get_string('block_bug_delete_user');
+
+save_config_value('block_bug', $f_block_bug);
+save_config_value('block_bug_disable_user', $f_block_bug_disable_user);
+save_config_value('block_bug_delete_user', $block_bug_delete_user);
 
 #
-# Update database - block_bug
+# Done, cleanup, show success, and redirect
 #
-$f_block_bug = gpc_get_string('block_bug');
-$query = "SELECT COUNT(*) FROM $t_db_table WHERE name='block_bug'";
-$t_result = db_query($query);
-$t_row_count = db_result($result); 
-if ($t_row_count < 1) {
-    $query = "INSERT INTO $t_db_table (name, value) VALUES ('block_bug', ?)";
-}
-else {
-    $query = "UPDATE $t_db_table SET value=? WHERE name='block_bug'";
-}
-db_query($query, array($f_block_bug));
 
 form_security_purge( 'plugin_SecurityExtend_securityextend_edit' );
 

@@ -26,6 +26,14 @@ class SecurityExtendPlugin extends MantisPlugin
     }
     
 
+    function init() 
+    {
+        $t_core = config_get_global('core_path');
+        $t_path = config_get_global('plugin_path'). plugin_get_current() . DIRECTORY_SEPARATOR . 'core'. DIRECTORY_SEPARATOR;
+        set_include_path(get_include_path() . PATH_SEPARATOR . $t_core . PATH_SEPARATOR . $t_path);
+    }
+
+
     function config() 
     {
 		return array(
@@ -58,12 +66,16 @@ class SecurityExtendPlugin extends MantisPlugin
     function securityextend_bug_report($p_event, $p_bug) 
     {
         securityextend_block_bug($p_bug, 'block_bug');
+        securityextend_block_bug($p_bug, 'block_bug_disable_user');
+        securityextend_block_bug($p_bug, 'block_bug_delete_user');
     }
     
 
     function securityextend_bug_update($p_event, $p_updated_bug, $p_existing_bug) 
     {
 		securityextend_block_bug($p_updated_bug, 'block_bug');
+        securityextend_block_bug($p_updated_bug, 'block_bug_disable_user');
+        securityextend_block_bug($p_updated_bug, 'block_bug_delete_user');
     }
     
 
