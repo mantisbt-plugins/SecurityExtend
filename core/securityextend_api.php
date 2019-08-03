@@ -105,7 +105,14 @@ function print_tab_bar()
 
 function print_tab($p_tab_title, $p_current_tab_title)
 {
-    $menu_item = '<a href="' . plugin_page('securityextend') . '&tab=' . urlencode($p_tab_title) . '">' . $p_tab_title . '</a>';
+    $t_tab_title = '';
+    if ($p_tab_title == 'Info') {
+        $t_tab_title = '<i class="blue ace-icon fa fa-info-circle"></i>';
+    }
+    else {
+        $t_tab_title = $p_tab_title;
+    }
+    $menu_item = '<a href="' . plugin_page('securityextend') . '&tab=' . urlencode($p_tab_title) . '">' . $t_tab_title . '</a>';
     $active = $p_current_tab_title === $p_tab_title ? ' class="active"' : '';
     echo "<li{$active}>" . $menu_item . '</li>';
 }
