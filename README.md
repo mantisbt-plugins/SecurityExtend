@@ -1,4 +1,4 @@
-# SecurityExtend MantisBT Plugin
+# SecurityExtend MantisBT Plugin - Stop and Frustrate Spammers
 
 ![app-type](https://img.shields.io/badge/category-mantisbt%20plugins-blue.svg)
 ![app-lang](https://img.shields.io/badge/language-php-blue.svg)
@@ -12,10 +12,14 @@
 [![MantisBT version current](https://app1.spmeesseman.com/projects/plugins/ApiExtend/api/versionbadge/SecurityExtend/current)](https://app1.spmeesseman.com/projects/set_project.php?project=SecurityExtend&make_default=no&ref=plugin.php?page=Releases/releases)
 [![MantisBT version next](https://app1.spmeesseman.com/projects/plugins/ApiExtend/api/versionbadge/SecurityExtend/next)](https://app1.spmeesseman.com/projects/set_project.php?project=SecurityExtend&make_default=no&ref=plugin.php?page=Releases/releases)
 
-- [SecurityExtend MantisBT Plugin](#SecurityExtend-MantisBT-Plugin)
+- [SecurityExtend MantisBT Plugin - Stop and Frustrate Spammers](#SecurityExtend-MantisBT-Plugin---Stop-and-Frustrate-Spammers)
   - [Description](#Description)
   - [Installation](#Installation)
   - [Issues and Feature Requests](#Issues-and-Feature-Requests)
+  - [Usage](#Usage)
+    - [Usage - Bug Blocker](#Usage---Bug-Blocker)
+    - [Usage - Email Domain Blocker](#Usage---Email-Domain-Blocker)
+  - [Logging](#Logging)
   - [Screenshots](#Screenshots)
     - [Editor Screen](#Editor-Screen)
   - [Todos](#Todos)
@@ -45,6 +49,42 @@ Install the plugin using the default installation procedure for a MantisBT plugi
 
 Issues for my plugins will probably at some point be hosted by my [MantisBT](https://app1.spmeesseman.com/projects/set_project.php?project=SecurityExtend&make_default=no&ref=bug_report_page.php) site.  Until that is up and running and configured correctly, please use [GitHub Issues](https://github.com/mantisbt-plugins/SecurityExtend/issues) to report any problems or requests.
 
+## Usage
+
+There are currently two components to the SecurityExtend plugin:
+
+1. Bug blocker
+2. Email domain blocker
+
+### Usage - Bug Blocker
+
+The `Bug Blocker` component will examine the following issue fields when a user creates or updates an issue/ticket:
+
+- summary
+- description
+- steps_to_reproduce
+- additional_notes
+
+If any text in either one of these fields contains a keyword or phrase that is set in the user defined list, appropriate action will be taken.  The keywords and phrases can be configured independently to provide the following actions when a bug blocking event is triggered:
+
+- Block the issue create/update and display a spam warning
+- Block the issue create/update and `disable` the offending user account
+- Block the issue create/update and `delete` the offending user account
+
+In cases 2 and 3, the user is also booted and sent back to the login page, no longer with an account to log in with.  Hopefully thet get frustrated and leave your site alone now.
+
+### Usage - Email Domain Blocker
+
+NOTE: As of August 2nd 2019, this feature is not yet complete.
+
+The `Email Domain Blocker` component will examine the email address of a user that is registering.  If the email address is from a domain that is set in the user defined list, the account will be blocked from being created.
+
+## Logging
+
+NOTE: As of August 2nd 2019, this feature is not yet complete.
+
+All triggered events are logged and can be viewed in the `Log` tab.
+
 ## Screenshots
 
 ### Editor Screen
@@ -53,5 +93,6 @@ Issues for my plugins will probably at some point be hosted by my [MantisBT](htt
 
 ## Todos
 
-- [ ] Support for blacklisting email domains from creating accounts
-- [ ] Support for blacklisting specific email addresses from creating accounts
+- [ ] Blacklist email domains from creating accounts
+- [ ] Blacklist specific email addresses from creating accounts
+- [ ] Log events that have been triggered
