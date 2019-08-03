@@ -57,9 +57,13 @@ class SecurityExtendPlugin extends MantisPlugin
 
     function securityextend_menu() 
     {
-		return array(
-			'<a href="' . plugin_page( 'securityextend' ) . '">' . plugin_lang_get( 'management_title' ) . '</a>',
-		);
+        if (access_has_global_level(plugin_config_get('view_threshold_level'))) {
+            return array(
+                '<a href="' . plugin_page( 'securityextend' ) . '">' . plugin_lang_get( 'management_title' ) . '</a>',
+            );
+        }
+
+        return array();
     }
     
 
