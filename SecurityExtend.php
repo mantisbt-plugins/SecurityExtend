@@ -65,17 +65,17 @@ class SecurityExtendPlugin extends MantisPlugin
 
     function securityextend_bug_report($p_event, $p_bug) 
     {
-        securityextend_block_bug($p_bug, 'block_bug');
-        securityextend_block_bug($p_bug, 'block_bug_disable_user');
         securityextend_block_bug($p_bug, 'block_bug_delete_user');
+        securityextend_block_bug($p_bug, 'block_bug_disable_user');
+		securityextend_block_bug($p_bug, 'block_bug');
     }
     
 
     function securityextend_bug_update($p_event, $p_updated_bug, $p_existing_bug) 
     {
-		securityextend_block_bug($p_updated_bug, 'block_bug');
-        securityextend_block_bug($p_updated_bug, 'block_bug_disable_user');
         securityextend_block_bug($p_updated_bug, 'block_bug_delete_user');
+        securityextend_block_bug($p_updated_bug, 'block_bug_disable_user');
+		securityextend_block_bug($p_updated_bug, 'block_bug');
     }
     
 

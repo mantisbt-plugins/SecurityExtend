@@ -44,7 +44,7 @@ echo '</ul>' . "\n<br />";
 
 <?php
             echo form_security_field('plugin_SecurityExtend_securityextend_edit');
-            echo '<input type="hidden" name="tab" value="' . $active_file . '">';
+            echo '<input type="hidden" name="tab" value="' . $t_current_tab . '">';
 
             #
             # 'Block bug' tab

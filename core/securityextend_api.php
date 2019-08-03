@@ -37,6 +37,17 @@ function securityextend_block_bug($p_bug, $p_config_name)
     }
 }
 
+
+function get_mantis_base_url()
+{
+    return sprintf(
+      "%s://%s/projects/",
+      isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https' : 'http',
+      $_SERVER['SERVER_NAME']
+    );
+}
+
+
 function check_text($p_regex, $p_text, $p_disable_user = false, $p_delete_user = false)
 {
     if (!is_blank($p_text)) {
@@ -55,8 +66,8 @@ function check_text($p_regex, $p_text, $p_disable_user = false, $p_delete_user =
                 else {
                     user_delete( $t_user_id );
                 }
+                print_header_redirect('');
             }
-            die();
         }
     }
 }

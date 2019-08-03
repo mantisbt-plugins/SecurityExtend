@@ -14,7 +14,7 @@ $f_block_bug_delete_user = gpc_get_string('block_bug_delete_user');
 
 save_config_value('block_bug', $f_block_bug);
 save_config_value('block_bug_disable_user', $f_block_bug_disable_user);
-save_config_value('block_bug_delete_user', $block_bug_delete_user);
+save_config_value('block_bug_delete_user', $f_block_bug_delete_user);
 
 #
 # Done, cleanup, show success, and redirect
