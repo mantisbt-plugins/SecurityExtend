@@ -1,0 +1,17 @@
+<?php
+
+# Custom strings for english language
+
+$s_plugin_SecurityExtend_title = 'SecurityExtend';
+$s_plugin_SecurityExtend_description = 'Add some additional security to MantisBT';
+$s_plugin_SecurityExtend_config = 'Configuration';
+$s_plugin_SecurityExtend_update_config = 'Update Configuration';
+
+$s_plugin_SecurityExtend_management_title = 'Security Extend';
+
+$s_plugin_SecurityExtend_management_block_bug_title = 'Bug Block Keywords';
+$s_plugin_SecurityExtend_management_block_bug_label = 'Bug Block';
+$s_plugin_SecurityExtend_management_block_description_label = 'Comma separated list of keywords and phrases';
+
+$s_plugin_SecurityExtend_management_block_domain_title = 'Blacklist Domains';
+$s_plugin_SecurityExtend_management_block_domain_label = 'Blacklisted Domains';
