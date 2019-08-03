@@ -27,6 +27,15 @@ $t_current_tab = print_tab_bar();
         echo '<input type="hidden" name="tab" value="' . $t_current_tab . '">';
 
         #
+        # 'Info' tab
+        #
+        if ($t_current_tab === plugin_lang_get('management_info_title'))
+        {
+            $t_section_content = 'Not implemented yet';
+            print_section('info', $t_section_content, 'fa-book');
+            print_section('info_changelog', $t_section_content, 'fa-book');
+        }
+        #
         # 'Block bug' tab
         #
         if ($t_current_tab === plugin_lang_get('management_block_bug_title'))

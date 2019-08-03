@@ -83,7 +83,7 @@ function check_text($p_regex, $p_text, $p_disable_user = false, $p_delete_user =
 
 function print_tab_bar()
 {
-    $t_first_tab_title = plugin_lang_get('management_block_bug_title');
+    $t_first_tab_title = plugin_lang_get('management_info_title');
     $t_current_tab = gpc_get_string('tab', null);
     $t_is_first_page = ($t_current_tab === null);
     if ($t_is_first_page) {
@@ -93,6 +93,7 @@ function print_tab_bar()
     echo '<ul class="nav nav-tabs padding-18" style="margin-top:5px;margin-left:5px;">' . "\n";
     
     print_tab($t_first_tab_title, $t_current_tab);
+    print_tab(plugin_lang_get('management_block_bug_title'), $t_current_tab);
     print_tab(plugin_lang_get('management_block_domain_title'), $t_current_tab);
     print_tab(plugin_lang_get('management_log_title'), $t_current_tab);
 
