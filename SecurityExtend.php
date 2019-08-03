@@ -65,19 +65,15 @@ class SecurityExtendPlugin extends MantisPlugin
 
     function securityextend_bug_report($p_event, $p_bug) 
     {
-        securityextend_block_bug($p_bug, 'block_bug_delete_user');
-        securityextend_block_bug($p_bug, 'block_bug_disable_user');
-		securityextend_block_bug($p_bug, 'block_bug');
+        block_bug($p_bug);
     }
     
 
     function securityextend_bug_update($p_event, $p_updated_bug, $p_existing_bug) 
     {
-        securityextend_block_bug($p_updated_bug, 'block_bug_delete_user');
-        securityextend_block_bug($p_updated_bug, 'block_bug_disable_user');
-		securityextend_block_bug($p_updated_bug, 'block_bug');
+        block_bug($p_updated_bug);
     }
-    
+
 
 	function schema() 
     {
@@ -88,13 +84,19 @@ class SecurityExtendPlugin extends MantisPlugin
                     name    C(128)   NOTNULL DEFAULT '',
                     value   X        NOTNULL DEFAULT ''"
                 )
-            )/*,
-            array('AddColumnSQL', 
-                array( plugin_table('file', 'ServerFiles'), "
-                    order              I       NOTNULL DEFAULT 0",
-                    array( "mysql" => "DEFAULT CHARSET=utf8" ) 
+            ),
+            array('CreateTableSQL',
+                array( plugin_table('log', 'SecurityExtend'), "
+                    id      I        NOTNULL UNSIGNED AUTOINCREMENT PRIMARY,
+                    user    C(128)   NOTNULL DEFAULT '',
+                    email   C(128)   NOTNULL DEFAULT '',
+                    date    T        NOTNULL DEFAULT '1970-01-01 00:00:01',
+                    action  C(64)    NOTNULL DEFAULT '',
+                    xdata1  C(128)   NOTNULL DEFAULT '',
+                    xdata2  C(128)   NOTNULL DEFAULT '',
+                    xdata3  C(128)   NOTNULL DEFAULT ''"
                 )
-            )*/
+            )
         );
     }
 

@@ -1,7 +1,15 @@
 <?php
 
 
-function securityextend_block_bug($p_bug, $p_config_name) 
+function block_bug($p_bug)
+{
+    block_bug_kind($p_bug, 'block_bug_delete_user');
+    block_bug_kind($p_bug, 'block_bug_disable_user');
+    block_bug_kind($p_bug, 'block_bug');
+}
+
+
+function block_bug_kind($p_bug, $p_config_name) 
 {
     $query = 'SELECT value FROM ' . plugin_table('config') . " WHERE name='" . $p_config_name . "'";
     $result = db_query($query);
@@ -72,22 +80,42 @@ function check_text($p_regex, $p_text, $p_disable_user = false, $p_delete_user =
     }
 }
 
-function print_textarea_section($p_field_name, $p_fa_icon = 'fa-bug')
+
+function print_tab_bar()
 {
-    $t_value = '';
-    $t_block_id = 'plugin_SecurityExtend_'.$p_field_name;
+    $t_first_tab_title = plugin_lang_get('management_block_bug_title');
+    $t_current_tab = gpc_get_string('tab', null);
+    $t_is_first_page = ($t_current_tab === null);
+    if ($t_is_first_page) {
+        $t_current_tab = $t_first_tab_title; 
+    }
+
+    echo '<ul class="nav nav-tabs padding-18" style="margin-top:5px;margin-left:5px;">' . "\n";
+    
+    print_tab($t_first_tab_title, $t_current_tab);
+    print_tab(plugin_lang_get('management_block_domain_title'), $t_current_tab);
+    print_tab(plugin_lang_get('management_log_title'), $t_current_tab);
+
+    echo '</ul>' . "\n<br />";
+
+    return $t_current_tab;
+}
+
+
+function print_tab($p_tab_title, $p_current_tab_title)
+{
+    $menu_item = '<a href="' . plugin_page('securityextend') . '&tab=' . urlencode($p_tab_title) . '">' . $p_tab_title . '</a>';
+    $active = $p_current_tab_title === $p_tab_title ? ' class="active"' : '';
+    echo "<li{$active}>" . $menu_item . '</li>';
+}
+
+
+function print_section($p_section_name, $p_content, $p_fa_icon = 'fa-bug')
+{
+    $t_block_id = 'plugin_SecurityExtend_'.$p_section_name;
     $t_collapse_block = is_collapsed($t_block_id);
     $t_block_css = $t_collapse_block ? 'collapsed' : '';
     $t_block_icon = $t_collapse_block ? 'fa-chevron-down' : 'fa-chevron-up';
-
-    $query = "SELECT value FROM " . plugin_table('config') . " WHERE name='$p_field_name'";
-    $result = db_query($query);
-    if ($row = db_fetch_array($result)) {
-        if (!$row) {
-            trigger_error(ERROR_FILE_NOT_FOUND, ERROR);
-        }
-        $t_value = $row['value'];
-    }
 
     echo '
     <div id="<?php echo $t_block_id ?>" class="widget-box widget-color-blue2  no-border ' . $t_block_css . '">
@@ -95,7 +123,7 @@ function print_textarea_section($p_field_name, $p_fa_icon = 'fa-bug')
         <div class="widget-header widget-header-small">
             <h4 class="widget-title lighter">
                 <i class="ace-icon fa ' . $p_fa_icon . '"></i>
-                ' . plugin_lang_get('management_'.$p_field_name.'_label'), lang_get('word_separator'), plugin_lang_get('management_block_description_label'). '
+                ' . plugin_lang_get('management_'.$p_section_name.'_label') . '
             </h4>
             <div class="widget-toolbar">
                 <a data-action="collapse" href="#">
@@ -105,7 +133,7 @@ function print_textarea_section($p_field_name, $p_fa_icon = 'fa-bug')
         </div>
 
         <div class="widget-toolbox padding-8 clearfix">
-            ' . plugin_lang_get('management_'.$p_field_name.'_description') . '
+            ' . plugin_lang_get('management_'.$p_section_name.'_description') . '
         </div>
 
         <div class="widget-body">
@@ -116,7 +144,7 @@ function print_textarea_section($p_field_name, $p_fa_icon = 'fa-bug')
                             <fieldset>
                                 <tr>
                                     <td>
-                                        <textarea name="' . $p_field_name . '" rows="5" spellcheck="true" style="width:100%" />' . $t_value . '</textarea>
+                                        ' . $p_content . '
                                     </td>
                                 </tr>
                             </fieldset>
@@ -127,6 +155,22 @@ function print_textarea_section($p_field_name, $p_fa_icon = 'fa-bug')
         </div>
         
     </div>';
+}
+
+
+function print_textarea_section($p_field_name, $p_fa_icon = 'fa-bug')
+{
+    $t_value = '';
+    $query = "SELECT value FROM " . plugin_table('config') . " WHERE name='$p_field_name'";
+    $result = db_query($query);
+    if ($row = db_fetch_array($result)) {
+        if (!$row) {
+            trigger_error(ERROR_FILE_NOT_FOUND, ERROR);
+        }
+        $t_value = $row['value'];
+    }
+    $t_field = '<textarea name="' . $p_field_name . '" rows="5" spellcheck="true" style="width:100%" />' . $t_value . '</textarea>';
+    print_section($p_field_name, $t_field, $p_fa_icon);
 }
 
 
@@ -143,4 +187,12 @@ function save_config_value($p_config_name, $p_config_value)
         $t_query = "UPDATE $t_db_table SET value=? WHERE name='$p_config_name'";
     }
     db_query($t_query, array($p_config_value));
+}
+
+
+function print_save_button_footer()
+{
+    echo '<div class="widget-toolbox padding-8 clearfix">
+        <input type="submit" class="btn btn-primary btn-white btn-round" value="' . lang_get('save') . '" />
+    </div>';
 }
