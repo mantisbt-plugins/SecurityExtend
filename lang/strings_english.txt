@@ -9,7 +9,7 @@ $s_plugin_SecurityExtend_update_config = 'Update Configuration';
 
 $s_plugin_SecurityExtend_management_title = 'Security Extend';
 
-$s_plugin_SecurityExtend_management_block_bug_title = 'Bug Block Keywords';
+$s_plugin_SecurityExtend_management_block_bug_title = 'Bug Block';
 $s_plugin_SecurityExtend_management_block_bug_label = 'Bug Block';
 $s_plugin_SecurityExtend_management_block_bug_description = 'A comma separated list of keywords and phrases that will block issues from being created/updated';
 $s_plugin_SecurityExtend_management_block_bug_disable_user_label = 'Bug Block &amp; Disable User';
@@ -17,7 +17,7 @@ $s_plugin_SecurityExtend_management_block_bug_disable_user_description = 'A comm
 $s_plugin_SecurityExtend_management_block_bug_delete_user_label = 'Bug Block &amp; Delete User';
 $s_plugin_SecurityExtend_management_block_bug_delete_user_description = 'A comma separated list of keywords and phrases that will block issues from being created/updated and delete the offending user account';
 
-$s_plugin_SecurityExtend_management_block_domain_title = 'Account Block Keywords';
+$s_plugin_SecurityExtend_management_block_domain_title = 'Account Block';
 $s_plugin_SecurityExtend_management_block_domain_label = 'Account Block Domains';
 $s_plugin_SecurityExtend_management_block_domain_description = 'A comma separated list of email domains that accounts cannot be created with';
 
