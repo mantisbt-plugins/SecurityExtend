@@ -17,8 +17,7 @@ $t_current_tab = print_tab_bar();
 
 ?>
 
-<div class="col-xs-12 col-md-8 col-md-offset-2">
-    <div class="space-10"></div>
+<div class="col-xs-12">
     <div id="config-div" class="form-container">
         <form method="post" enctype="multipart/form-data" action="<?php echo plugin_page('securityextend_edit') ?>">
 
