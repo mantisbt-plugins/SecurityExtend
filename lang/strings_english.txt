@@ -11,13 +11,13 @@ $s_plugin_SecurityExtend_management_title = 'Security Extend';
 
 $s_plugin_SecurityExtend_management_block_bug_title = 'Bug Block Keywords';
 $s_plugin_SecurityExtend_management_block_bug_label = 'Bug Block';
-$s_plugin_SecurityExtend_management_block_bug_description = 'A list of keywords and phrases that will block issues from being created';
+$s_plugin_SecurityExtend_management_block_bug_description = 'A list of keywords and phrases that will block issues from being created/updated';
 
 $s_plugin_SecurityExtend_management_block_bug_disable_user_label = 'Bug Block &amp; Disable User';
-$s_plugin_SecurityExtend_management_block_bug_disable_user_description = 'A list of keywords and phrases that will block issues from being created and disable the offending user account';
+$s_plugin_SecurityExtend_management_block_bug_disable_user_description = 'A list of keywords and phrases that will block issues from being created/updated and disable the offending user account';
 
 $s_plugin_SecurityExtend_management_block_bug_delete_user_label = 'Bug Block &amp; Delete User';
-$s_plugin_SecurityExtend_management_block_bug_delete_user_description = 'A list of keywords and phrases that will block issues from being created and delete the offending user account';
+$s_plugin_SecurityExtend_management_block_bug_delete_user_description = 'A list of keywords and phrases that will block issues from being created/updated and delete the offending user account';
 
 $s_plugin_SecurityExtend_management_block_description_label = '(comma separated list)';
 
