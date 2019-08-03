@@ -5,7 +5,6 @@ require_once('securityextend_api.php');
 form_security_validate( 'plugin_SecurityExtend_securityextend_edit' );
 auth_reauthenticate();
 
-access_ensure_global_level(config_get('manage_plugin_threshold'));
 access_ensure_global_level(config_get('edit_threshold_level'));
 
 $f_tab= gpc_get_string('tab');
