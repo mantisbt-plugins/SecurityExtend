@@ -71,12 +71,14 @@ class SecurityExtendPlugin extends MantisPlugin
     function securityextend_bug_report($p_event, $p_bug) 
     {
         block_bug($p_bug);
+        return $p_bug;
     }
     
 
     function securityextend_bug_update($p_event, $p_updated_bug, $p_existing_bug) 
     {
         block_bug($p_updated_bug);
+        return $p_updated_bug;
     }
 
 
