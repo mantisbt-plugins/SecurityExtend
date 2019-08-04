@@ -6,7 +6,10 @@ require_once('securityextend_api.php');
 auth_reauthenticate();
 access_ensure_project_level(plugin_config_get('view_threshold_level'));
 
-layout_page_header(plugin_lang_get('management_title'));
+layout_page_header_begin(plugin_lang_get('management_title'));
+echo "\t" . '<script type="text/javascript" src="' . plugin_file('securityextend.js') . '"></script>' . "\n";
+layout_page_header_end( $p_page_id );
+
 layout_page_begin(__FILE__);
 print_manage_menu('SecurityExtend/securityextend');
 
@@ -14,6 +17,8 @@ $keywords_block_bug = '';
 $keywords_block_bugnote = '';
 
 $t_current_tab = print_tab_bar();
+
+echo '<div hidden title="' . plugin_lang_get('management_confirm_clear') . '" id="securityextend_confirm_clear"></div>';
 
 ?>
 
@@ -30,6 +35,20 @@ $t_current_tab = print_tab_bar();
             print_section('info_changelog', $t_section_content, 'fa-book');
         }
         #
+        # 'Block domain' tab
+        #
+        else if ($t_current_tab === plugin_lang_get('management_block_account_title'))
+        {
+            echo '<form method="post" enctype="multipart/form-data" action="' . plugin_page('securityextend_edit'). '">';
+            echo form_security_field('plugin_SecurityExtend_securityextend_edit');
+            echo '<input type="hidden" name="tab" value="' . $t_current_tab . '" />';
+            echo '<input type="hidden" name="id" value="0" />';
+            print_textarea_section('block_account_domain', 'fa-envelope');
+            print_save_button_footer('save_account_block');
+            echo '</form>';
+            print_blocked_email_section();
+        }
+        #
         # 'Block bug' tab
         #
         if ($t_current_tab === plugin_lang_get('management_block_bug_title'))
@@ -43,20 +62,6 @@ $t_current_tab = print_tab_bar();
             print_textarea_section('block_bug_delete_user', 'fa-bug');
             print_save_button_footer('save_bug_block');
             echo '</form>';
-        }
-        #
-        # 'Block domain' tab
-        #
-        else if ($t_current_tab === plugin_lang_get('management_block_account_title'))
-        {
-            echo '<form method="post" enctype="multipart/form-data" action="' . plugin_page('securityextend_edit'). '">';
-            echo form_security_field('plugin_SecurityExtend_securityextend_edit');
-            echo '<input type="hidden" name="tab" value="' . $t_current_tab . '" />';
-            echo '<input type="hidden" name="id" value="0" />';
-            print_textarea_section('block_account_domain', 'fa-envelope');
-            print_save_button_footer('save_account_block');
-            echo '</form>';
-            print_blocked_email_section();
         }
         #
         # 'Log' tab

@@ -13,6 +13,7 @@ $s_plugin_SecurityExtend_show_bird_on_bug_block_label = 'See ya...';
 $s_plugin_SecurityExtend_show_bird_on_bug_block_description = 'Spammer detected, you are long gone';
 
 $s_plugin_SecurityExtend_management_title = 'Security Extend';
+$s_plugin_SecurityExtend_management_confirm_clear = 'Are you sure you want clear/delete all items?';
 
 $s_plugin_SecurityExtend_management_info_title = 'Info';
 $s_plugin_SecurityExtend_management_info_label = 'Readme';
