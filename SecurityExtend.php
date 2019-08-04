@@ -51,7 +51,8 @@ class SecurityExtendPlugin extends MantisPlugin
 		return array(
             'EVENT_MENU_MANAGE' => 'securityextend_menu',
             'EVENT_REPORT_BUG_DATA' => 'securityextend_bug_report',
-            'EVENT_UPDATE_BUG_DATA' => 'securityextend_bug_update'
+            'EVENT_UPDATE_BUG_DATA' => 'securityextend_bug_update',
+            'EVENT_MANAGE_USER_CREATE' => 'securityextend_user_create'
 		);
     }
     
@@ -79,6 +80,13 @@ class SecurityExtendPlugin extends MantisPlugin
     {
         block_bug($p_updated_bug);
         return $p_updated_bug;
+    }
+
+
+    function securityextend_user_create($p_event, $p_user_id) 
+    {
+        block_account($p_user_id);
+        return $p_user_id;
     }
 
 

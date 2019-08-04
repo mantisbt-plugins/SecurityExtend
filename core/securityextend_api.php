@@ -1,5 +1,34 @@
 <?php
 
+function block_account($p_user_id)
+{
+    $t_user_name = user_get_username($p_user_id);
+    $t_user_email = user_get_email($p_user_id); 
+
+    if (is_email_forbidden($t_user_email))
+    {
+        user_delete( $p_user_id );
+
+        $t_email_id_queue = email_queue_get_ids();
+        foreach ($t_email_id_queue as $t_email_id)
+        {
+            $t_email = email_queue_get($t_email_id);
+            if ($t_email->email == $t_user_email) {
+                email_queue_delete($t_email_id, 'Removed from queue, account block email adddress [SecurityExtend]');
+            }
+        }
+        
+        log_securityextend_event($t_user_name, $t_user_email, 'block_account_email_address');
+
+        if (!plugin_config_get('show_bird_on_bug_block')) {
+            print_header_redirect('');
+        }
+        else {
+            print_header_redirect(plugin_page('thebird', true));
+        }
+    }
+}
+
 
 function block_bug($p_bug)
 {
@@ -48,7 +77,8 @@ function block_bug_kind($p_bug, $p_config_name)
 
 function check_text($p_bug, $p_regex, $p_text, $p_disable_user = false, $p_delete_user = false)
 {
-    if (!is_blank($p_text)) {
+    if (!is_blank($p_text)) 
+    {
         preg_match_all( $p_regex, $p_text, $t_matches );
         foreach( $t_matches[0] as $t_substring ) 
         {
@@ -99,7 +129,7 @@ function get_button_clear($p_tab, $p_action, $p_param = '')
                     <input type="hidden" name="param" value="' . $p_param . '" />
                     <input type="hidden" name="tab" value="' . $p_tab . '" />
                     <input type="hidden" name="id" value="0" />
-                    <input type="submit" name="submit" class="btn btn-primary btn-sm btn-white btn-round" value="' . plugin_lang_get('management_log_clear') . '" />
+                    <input type="submit" name="submit" class="btn btn-primary btn-sm btn-white btn-round securityextend-clear" value="' . plugin_lang_get('management_log_clear') . '" />
                 </form>
             </span>';
 }
@@ -114,7 +144,7 @@ function get_button_delete($p_tab, $p_action, $p_id = 0, $p_param = '')
                     <input type="hidden" name="param" value="' . $p_param . '" />
                     <input type="hidden" name="tab" value="' . $p_tab . '" />
                     <input type="hidden" name="id" value="' . $p_id . '" />
-                    <input type="submit" name="submit" class="btn btn-primary btn-sm btn-white btn-round" value="' . lang_get('delete_link') . '" />
+                    <input type="submit" name="submit" class="btn btn-primary btn-sm btn-white btn-round securityextend-delete" value="' . lang_get('delete_link') . '" />
                 </form>
             </span>';
 }
@@ -122,14 +152,14 @@ function get_button_delete($p_tab, $p_action, $p_id = 0, $p_param = '')
 
 function get_button_add_email()
 {
-    return '<span class="pull-right padding-right-8">
+    return '<span class="pull-right" style="padding-right:30px">
                 <form method="post" action="' . plugin_page('securityextend_edit') . '" class="form-inline">
                     ' . form_security_field('plugin_SecurityExtend_securityextend_edit') . '
                     <input type="hidden" name="action" value="add_account_blocked_email" />
                     <input type="hidden" name="tab" value="Account Block" />
                     <input type="hidden" name="id" value="0" />
                     <input type="submit" name="submit" class="btn btn-primary btn-sm btn-white btn-round" value="' . lang_get('add_user_to_monitor') . ':" /> 
-                    <input type="text" name="param" class="input-sm" />
+                    <input type="text" name="param" class="input-sm" style="width:250px !important" />
                 </form>
             </span>';
 }
@@ -147,8 +177,8 @@ function get_mantis_base_url()
 
 function is_email_forbidden($p_email)
 {
-    $t_db_table = plugin_table('log');
-    $t_query = "SELECT COUNT(*) FROM $t_db_table WHERE email='$p_email' AND action IN ('block_bug_disable_user', 'block_bug_delete_user')";
+    $t_db_table = plugin_table('config');
+    $t_query = "SELECT COUNT(*) FROM $t_db_table WHERE value='$p_email' AND name='block_account_email_address'";
     $t_result = db_query($t_query);
     $t_row_count = db_result($t_result); 
     if ($t_row_count >= 1) {
@@ -409,7 +439,7 @@ function print_tab($p_tab_title, $p_current_tab_title)
 
 function print_tag_blocked_email($p_email_address, $p_removable = true)
 {  
-    echo '<span class="pull-left padding-right-2">
+    echo '<span class="pull-left padding-right-2 padding-bottom-2">
             <form id="form_' . $p_email_address . '" method="post" action="' . plugin_page('securityextend_edit') . '" title= "
                 ' . ($p_removable ? lang_get('delete_link') . ' ' : '') . '" class="form-inline">
                 ' . form_security_field('plugin_SecurityExtend_securityextend_edit') . '
@@ -439,8 +469,8 @@ function print_tab_bar()
     echo '<ul class="nav nav-tabs padding-18" style="margin-top:5px;margin-left:5px;">' . "\n";
     
     print_tab($t_first_tab_title, $t_current_tab);
-    print_tab(plugin_lang_get('management_block_bug_title'), $t_current_tab);
     print_tab(plugin_lang_get('management_block_account_title'), $t_current_tab);
+    print_tab(plugin_lang_get('management_block_bug_title'), $t_current_tab);
     print_tab(plugin_lang_get('management_log_title'), $t_current_tab);
 
     echo '</ul>' . "\n<br />";
