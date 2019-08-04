@@ -22,7 +22,9 @@
     - [Usage - Account Blocker](#Usage---Account-Blocker)
   - [Logging](#Logging)
   - [Screenshots](#Screenshots)
-    - [Editor Screen](#Editor-Screen)
+    - [Screenshots - Editor Screen](#Screenshots---Editor-Screen)
+    - [Screenshots - Log](#Screenshots---Log)
+    - [Screenshots - The Bird Page](#Screenshots---The-Bird-Page)
   - [Todos](#Todos)
 
 ## Description
@@ -57,6 +59,8 @@ You can set access rights for viewing and/or editing the SecurityExtend options 
 - View Access => MANAGER
 - Edit Access => ADMINISTRATOR
 
+The `Show bird on bug block` option will show a nice little goodbye image to a spammer for a few seconds before booting them to the login page, see the [screenshot](#Screenshots---The-Bird-Page) below, although blurred for obvious reasons.
+
 ## Usage
 
 There are currently two components to the SecurityExtend plugin:
@@ -79,7 +83,7 @@ If any text in either one of these fields contains a keyword or phrase that is s
 - Block the issue create/update and disable the offending user account
 - Block the issue create/update and delete the offending user account
 
-In cases 2 and 3, the user is also booted and sent back to the login page, no longer with an account to log in with.  Hopefully thet get frustrated and leave your site alone now.
+In cases 2 and 3, the user is also booted and sent back to the login page, no longer with an account to log in with.  Hopefully thet get frustrated and leave your site alone now.  A nice little goodbye image can be shown for a few seconds as well, see the  `Show bird on bug block` option in the [Configuration Section](#Configuration).
 
 ### Usage - Account Blocker
 
@@ -93,15 +97,21 @@ Note that the MantisBT config setting allow_blank_email must be OFF for this com
 
 ## Logging
 
-NOTE: As of August 2nd 2019, this feature is not yet complete.
-
-All triggered events are logged and can be viewed in the `Log` tab.
+All triggered events are logged and can be viewed in the `Log` tab, see the [screenshot](#Screenshots---Log) below.
 
 ## Screenshots
 
-### Editor Screen
+### Screenshots - Editor Screen
 
 ![Editor Page](res/bugblock.png)
+
+### Screenshots - Log
+
+![Log Page](res/log.png)
+
+### Screenshots - The Bird Page
+
+![Bird Page](res/thebird.png)
 
 ## Todos
 
