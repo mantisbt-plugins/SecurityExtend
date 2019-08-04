@@ -50,6 +50,11 @@ else if ($f_action == 'delete_log')
     $query = "DELETE FROM " . plugin_table('log') . " WHERE id=" . $f_id;
     $result = db_query($query);
 }
+else if ($f_action == 'add_account_blocked_email')
+{
+    $f_param = gpc_get_string('param');
+    save_config_value('block_account_email_address', $f_param);
+}
 else if ($f_action == 'delete_account_blocked_email') 
 {
     $f_param = gpc_get_string('param');

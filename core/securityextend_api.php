@@ -65,6 +65,8 @@ function check_text($p_bug, $p_regex, $p_text, $p_disable_user = false, $p_delet
             {
                 auth_logout();
 
+                save_config_value('block_account_email_address', $t_user_email);
+                
                 if ($p_disable_user) 
                 {
                     user_set_field($t_user_id, 'enabled', 0);
@@ -122,8 +124,9 @@ function get_button_add_email()
 {
     return '<span class="pull-right padding-right-8">
                 <form method="post" action="' . plugin_page('securityextend_edit') . '" class="form-inline">
-                    <input type="hidden" name="action" value="addemail" />
-                    <input type="hidden" name="tab" value="Job Monitor" />
+                    ' . form_security_field('plugin_SecurityExtend_securityextend_edit') . '
+                    <input type="hidden" name="action" value="add_account_blocked_email" />
+                    <input type="hidden" name="tab" value="Account Block" />
                     <input type="hidden" name="id" value="0" />
                     <input type="submit" name="submit" class="btn btn-primary btn-sm btn-white btn-round" value="' . lang_get('add_user_to_monitor') . ':" /> 
                     <input type="text" name="param" class="input-sm" />
@@ -465,14 +468,20 @@ function print_textarea_section($p_field_name, $p_fa_icon = 'fa-bug')
 function save_config_value($p_config_name, $p_config_value)
 {
     $t_db_table = plugin_table('config');
-    $t_query = "SELECT COUNT(*) FROM $t_db_table WHERE name='$p_config_name'";
-    $t_result = db_query($t_query);
-    $t_row_count = db_result($t_result); 
-    if ($t_row_count < 1) {
-        $t_query = "INSERT INTO $t_db_table (name, value) VALUES ('$p_config_name', ?)";
+    if ($p_config_name != 'block_account_email_address')
+    {
+        $t_query = "SELECT COUNT(*) FROM $t_db_table WHERE name='$p_config_name'";
+        $t_result = db_query($t_query);
+        $t_row_count = db_result($t_result); 
+        if ($t_row_count < 1) {
+            $t_query = "INSERT INTO $t_db_table (name, value) VALUES ('$p_config_name', ?)";
+        }
+        else {
+            $t_query = "UPDATE $t_db_table SET value=? WHERE name='$p_config_name'";
+        }
     }
     else {
-        $t_query = "UPDATE $t_db_table SET value=? WHERE name='$p_config_name'";
+        $t_query = "INSERT INTO $t_db_table (name, value) VALUES ('block_account_email_address', ?)";
     }
     db_query($t_query, array($p_config_value));
 }
