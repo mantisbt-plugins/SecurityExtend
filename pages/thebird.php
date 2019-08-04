@@ -26,7 +26,7 @@ layout_page_header(plugin_lang_get('show_bird_on_bug_block_label'));
             <table class="table table-bordered table-condensed table-striped">
                 <tr>
                     <td width="100%" align="center">
-                        <img src="<?php echo helper_mantis_url('plugins/SecurityExtend/files/img/thebird.jpg') ?>">
+                        <img src="<?php echo helper_mantis_url('plugins/SecurityExtend/files/img/thebird.jpg') ?>" height="600">
                     </td>
                 </tr>
             </table>
