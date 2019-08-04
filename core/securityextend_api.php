@@ -205,7 +205,6 @@ function print_blocked_email_section()
     else {
         while ($t_row = db_fetch_array($t_result)) {
             print_tag_blocked_email($t_row['value'], $t_user_has_edit_access);
-            echo '&nbsp; ';
         }
     }
     echo '   </div>
@@ -407,20 +406,21 @@ function print_tab($p_tab_title, $p_current_tab_title)
 
 function print_tag_blocked_email($p_email_address, $p_removable = true)
 {  
-    echo '<form id="form_' . $p_email_address . '" method="post" action="' . plugin_page('securityextend_edit') . '" title= "
-                ' . ($p_removable ? lang_get('delete_link') . ' ' : '') . '" class="form-inline padding-right-2">
+    echo '<span class="pull-left padding-right-2">
+            <form id="form_' . $p_email_address . '" method="post" action="' . plugin_page('securityextend_edit') . '" title= "
+                ' . ($p_removable ? lang_get('delete_link') . ' ' : '') . '" class="form-inline">
                 ' . form_security_field('plugin_SecurityExtend_securityextend_edit') . '
                 <input type="hidden" name="action" value="delete_account_blocked_email" />
                 <input type="hidden" name="tab" value="Account Block" />
                 <input type="hidden" name="id" value="0" />
                 <input type="hidden" name="param" value="' . $p_email_address . '" />
             </form>';
-    echo '<button class="btn btn-primary btn-sm btn-white btn-round" onclick="document.getElementById(\'form_' . $p_email_address . '\').submit()">';
+    echo '<span class="btn btn-primary btn-sm btn-white btn-round" onclick="document.getElementById(\'form_' . $p_email_address . '\').submit()">';
     echo $p_email_address;
     if ($p_removable) {
         echo ' <i class="fa fa-times"></i>';
     }
-    echo '</button>';
+    echo '</span></span>';
 }
 
 
