@@ -17,6 +17,7 @@
   - [Installation](#Installation)
   - [Issues and Feature Requests](#Issues-and-Feature-Requests)
   - [Configuration](#Configuration)
+    - [Configuration - General Security (config_inc.php)](#Configuration---General-Security-configincphp)
   - [Usage](#Usage)
     - [Usage - Bug Blocker](#Usage---Bug-Blocker)
     - [Usage - Account Blocker](#Usage---Account-Blocker)
@@ -59,7 +60,15 @@ You can set access rights for viewing and/or editing the SecurityExtend options 
 - View Access => MANAGER
 - Edit Access => ADMINISTRATOR
 
-The `Show bird on bug block` option will show a nice little goodbye image to a spammer for a few seconds before booting them to the login page, see the [screenshot](#Screenshots---The-Bird-Page) below, although blurred for obvious reasons.
+The `Show bird on bug block` option will show a nice little goodbye image to a spammer for a few seconds before booting them to the login page, see the [screenshot](#Screenshots---The-Bird-Page) below.
+
+### Configuration - General Security (config_inc.php)
+
+Some additional options that should be set to prevent spammers from posting content to your site:
+
+1. Set the `$g_tag_create_threshold` parameter to an access level greater than that of `$g_default_new_account_access_level`.
+2. Set the `$g_antispam_max_event_count` parameter to something lower than the drfault 10, or adjust accordingly.
+3. Set the `$g_antispam_time_window_in_seconds` to something lower than the default 3600, or adjust accordingly.
 
 ## Usage
 
@@ -111,10 +120,12 @@ All triggered events are logged and can be viewed in the `Log` tab, see the [scr
 
 ### Screenshots - The Bird Page
 
+Blurred here in the screenshot to remain considerate of readers.
+
 ![Bird Page](res/thebird.png)
 
 ## Todos
 
 - [ ] Blacklist email domains from creating accounts
 - [ ] Blacklist specific email addresses from creating accounts
-- [ ] Log events that have been triggered
+- [x] Log events that have been triggered
