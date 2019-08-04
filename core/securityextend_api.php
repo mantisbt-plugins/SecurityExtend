@@ -295,7 +295,7 @@ function print_log_section($p_section_name, $p_current_tab)
                                     ' . lang_get('email') . '
                                 </td>
                                 <td class="category">
-                                    ' . lang_get('summary')  . ' / ' . lang_get('description') . ' / ' . lang_get('steps_to_reproduce') . '
+                                    ' . lang_get('additional_information') . '
                                 </td>
                                 ' . ($t_user_has_edit_access ? '<td class="category"></td>' : '') . '
                             </tr>';

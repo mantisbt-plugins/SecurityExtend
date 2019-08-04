@@ -68,6 +68,7 @@ echo '<div hidden title="' . plugin_lang_get('management_confirm_clear') . '" id
         #
         else if ($t_current_tab === plugin_lang_get('management_log_title'))
         {
+            print_log_section('block_account_email_address', $t_current_tab);
             print_log_section('block_bug', $t_current_tab);
             print_log_section('block_bug_disable_user', $t_current_tab);
             print_log_section('block_bug_delete_user', $t_current_tab);

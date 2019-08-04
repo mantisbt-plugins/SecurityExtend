@@ -35,6 +35,8 @@ $s_plugin_SecurityExtend_management_block_account_blocked_email_description = 'B
 
 $s_plugin_SecurityExtend_management_log_title = 'Log';
 $s_plugin_SecurityExtend_management_log_clear= 'Clear';
+$s_plugin_SecurityExtend_management_log_block_account_email_address_label = $s_plugin_SecurityExtend_management_block_account_blocked_email_label;
+$s_plugin_SecurityExtend_management_log_block_account_email_address_description = 'Account sign-ups blocked with exising blacklisted email addresses';
 $s_plugin_SecurityExtend_management_log_block_bug_label = $s_plugin_SecurityExtend_management_block_bug_label;
 $s_plugin_SecurityExtend_management_log_block_bug_description = 'Issues blocked from being created/updated - with spam warning';
 $s_plugin_SecurityExtend_management_log_block_bug_disable_user_label = $s_plugin_SecurityExtend_management_block_bug_disable_user_label;
