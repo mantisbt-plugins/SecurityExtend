@@ -34,8 +34,8 @@ $block_bugnote = plugin_config_get('block_bugnote');
 							<div class="table-responsive">
 								<table class="table table-bordered table-condensed table-striped">
 									<fieldset>
-										<tr>
-											<td class="category">
+										<tr <?php echo helper_alternate_class() ?>>
+											<td class="category" width="200">
 												<?php echo lang_get('custom_field_access_level_r') ?>
 											</td>
 											<td>
@@ -44,14 +44,23 @@ $block_bugnote = plugin_config_get('block_bugnote');
 												</select>
 											</td>
 										</tr>
-										<tr>
-											<td class="category">
+										<tr <?php echo helper_alternate_class() ?>>
+											<td class="category" width="200">
 												<?php echo lang_get('custom_field_access_level_rw') ?>
 											</td>
 											<td>
 												<select name="edit_threshold_level">
 													<?php print_enum_string_option_list('access_levels', $edit_threshhold) ?>
 												</select>
+											</td>
+										</tr>
+										<tr <?php echo helper_alternate_class() ?>>
+											<td class="category" width="200">
+												<?php echo plugin_lang_get('config_show_bird_on_bug_block'); ?><br>
+												<span class="required"> * <?php echo plugin_lang_get('config_show_bird_on_bug_block_note') ?></span>
+											</td>
+											<td>
+												<input type="checkbox" name="show_bird_on_bug_block" <?php if (plugin_config_get('show_bird_on_bug_block', ON) == ON) echo ' checked="checked"' ?> />
 											</td>
 										</tr>
 									</fieldset>

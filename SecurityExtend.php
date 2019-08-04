@@ -40,7 +40,8 @@ class SecurityExtendPlugin extends MantisPlugin
 			'edit_threshold_level'	=> ADMINISTRATOR ,
             'view_threshold_level'	=> MANAGER,
             'block_bug' => ON,
-            'block_bugnote' => ON
+            'block_bugnote' => ON,
+            'show_bird_on_bug_block' => OFF
 		);
 	}
 

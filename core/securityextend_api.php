@@ -49,7 +49,7 @@ function block_bug_kind($p_bug, $p_config_name)
 function get_mantis_base_url()
 {
     return sprintf(
-      "%s://%s/projects/",
+      "%s://%s/",
       isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https' : 'http',
       $_SERVER['SERVER_NAME']
     );
@@ -74,7 +74,13 @@ function check_text($p_regex, $p_text, $p_disable_user = false, $p_delete_user =
                 else {
                     user_delete( $t_user_id );
                 }
-                print_header_redirect('');
+
+                if (!plugin_config_get('show_bird_on_bug_block')) {
+                    print_header_redirect('');
+                }
+                else {
+                    print_header_redirect(plugin_page('thebird', true));
+                }
             }
         }
     }
