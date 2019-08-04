@@ -32,8 +32,4 @@ else if ($f_tab == plugin_lang_get('management_block_domain_title'))
 form_security_purge('plugin_SecurityExtend_securityextend_edit');
 
 $t_redirect_url = plugin_page('securityextend', TRUE) . '&tab=' . $f_tab;
-
-layout_page_header(null, $t_redirect_url);
-layout_page_begin();
-html_operation_successful($t_redirect_url);
-layout_page_end();
+print_success_and_redirect($t_redirect_url);
