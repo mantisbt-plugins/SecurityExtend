@@ -45,7 +45,7 @@ $t_current_tab = print_tab_bar();
             print_save_button_footer();
         }
         #
-        # 'Blacklisted domains' tab
+        # 'Block domain' tab
         #
         else if ($t_current_tab === plugin_lang_get('management_block_domain_title'))
         {
@@ -57,8 +57,9 @@ $t_current_tab = print_tab_bar();
         #
         else if ($t_current_tab === plugin_lang_get('management_log_title'))
         {
-            $t_section_content = 'Not implemented yet';
-            print_section('log', $t_section_content, 'fa-file-alt');
+            print_log_section('block_bug', $t_current_tab);
+            print_log_section('block_bug_disable_user', $t_current_tab);
+            print_log_section('block_bug_delete_user', $t_current_tab);
         }
 ?>
         </form>
