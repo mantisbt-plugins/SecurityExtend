@@ -88,6 +88,50 @@ function check_text($p_bug, $p_regex, $p_text, $p_disable_user = false, $p_delet
 }
 
 
+function get_button_clear($p_tab, $p_action, $p_param = '')
+{
+    return '<span class="pull-right">
+                <form method="post" action="' . plugin_page('securityextend_edit') . '" title= "' . plugin_lang_get('management_log_clear') . '" class="form-inline">
+                    ' . form_security_field('plugin_SecurityExtend_securityextend_edit') . '
+                    <input type="hidden" name="action" value="' . $p_action . '" />
+                    <input type="hidden" name="param" value="' . $p_param . '" />
+                    <input type="hidden" name="tab" value="' . $p_tab . '" />
+                    <input type="hidden" name="id" value="0" />
+                    <input type="submit" name="submit" class="btn btn-primary btn-sm btn-white btn-round" value="' . plugin_lang_get('management_log_clear') . '" />
+                </form>
+            </span>';
+}
+
+
+function get_button_delete($p_tab, $p_action, $p_id = 0, $p_param = '')
+{
+    return '<span class="pull-right padding-right-8">
+                <form method="post" action="' . plugin_page('securityextend_edit') . '" title= "' . lang_get('delete_link') . '"  class="form-inline">
+                    ' . form_security_field('plugin_SecurityExtend_securityextend_edit') . '
+                    <input type="hidden" name="action" value="' . $p_action . '" />
+                    <input type="hidden" name="param" value="' . $p_param . '" />
+                    <input type="hidden" name="tab" value="' . $p_tab . '" />
+                    <input type="hidden" name="id" value="' . $p_id . '" />
+                    <input type="submit" name="submit" class="btn btn-primary btn-sm btn-white btn-round" value="' . lang_get('delete_link') . '" />
+                </form>
+            </span>';
+}
+
+
+function get_button_add_email()
+{
+    return '<span class="pull-right padding-right-8">
+                <form method="post" action="' . plugin_page('securityextend_edit') . '" class="form-inline">
+                    <input type="hidden" name="action" value="addemail" />
+                    <input type="hidden" name="tab" value="Job Monitor" />
+                    <input type="hidden" name="id" value="0" />
+                    <input type="submit" name="submit" class="btn btn-primary btn-sm btn-white btn-round" value="' . lang_get('add_user_to_monitor') . ':" /> 
+                    <input type="text" name="param" class="input-sm" />
+                </form>
+            </span>';
+}
+
+
 function get_mantis_base_url()
 {
     return sprintf(
@@ -119,6 +163,58 @@ function log_securityextend_event($p_user, $p_email, $p_action, $p_xdata1 = '', 
 }
 
 
+function print_blocked_email_section()
+{
+    $t_block_id = 'plugin_SecurityExtend_log_blocked_email';
+    $t_collapse_block = is_collapsed($t_block_id);
+    $t_block_css = $t_collapse_block ? 'collapsed' : '';
+    $t_block_icon = $t_collapse_block ? 'fa-chevron-down' : 'fa-chevron-up';
+
+    echo '
+    <div id="' . $t_block_id . '" class="widget-box widget-color-blue2 no-border ' . $t_block_css . '">
+
+        <div class="widget-header widget-header-small">
+            <h4 class="widget-title lighter">
+                <i class="ace-icon fa fa-envelope"></i>
+                ' . plugin_lang_get('management_block_account_blocked_email_label') . '
+            </h4>
+            <div class="widget-toolbar">
+                <a data-action="collapse" href="#">
+                    <i class="ace-icon fa ' . $t_block_icon . ' bigger-125"></i>
+                </a>
+            </div>
+        </div>
+
+        <div class="widget-toolbox padding-8 clearfix">
+            ' . plugin_lang_get('management_block_account_blocked_email_description')
+              . get_button_clear('Account Block', 'delete_account_blocked_email') . ' &nbsp;&nbsp;'
+              . get_button_add_email()  . '
+        </div>
+
+        <div class="widget-body">
+            <div class="widget-main">';
+            
+
+    $t_user_has_edit_access = access_has_global_level(plugin_config_get('edit_threshold_level'));
+    $t_query = "SELECT DISTINCT value FROM " . plugin_table('config') . " WHERE name='block_account_email_address' ORDER BY value ASC";
+    $t_result = db_query($t_query);
+
+    if (db_num_rows($t_result) == 0) {
+        echo '  0 blocked email addresses found</td></tr>';
+    } 
+    else {
+        while ($t_row = db_fetch_array($t_result)) {
+            print_tag_blocked_email($t_row['value'], $t_user_has_edit_access);
+            echo '&nbsp; ';
+        }
+    }
+    echo '   </div>
+        </div>  
+    </div>
+    ';
+}
+
+
 function print_log_section($p_section_name, $p_current_tab)
 {
     $t_block_id = 'plugin_SecurityExtend_log_'.$p_section_name;
@@ -142,8 +238,8 @@ function print_log_section($p_section_name, $p_current_tab)
         </div>
 
         <div class="widget-toolbox padding-8 clearfix">
-            ' . plugin_lang_get('management_log_'.$p_section_name.'_description') . '<span class="pull-right"><a class="btn btn-xs btn-primary btn-white btn-round" href="' . 
-                plugin_page('delete') . '&tab=' . urlencode($p_current_tab) . '&id=0&action=' . $p_section_name . '">' . plugin_lang_get('management_log_clear') . '</a></span>
+            ' . plugin_lang_get('management_log_'.$p_section_name.'_description') 
+              . get_button_clear($p_current_tab, 'delete_log', $p_section_name) . '
         </div>
 
         <div class="widget-body">
@@ -198,8 +294,7 @@ function print_log_section($p_section_name, $p_current_tab)
                                     ' . (!is_blank($t_row['xdata3']) ? '<br><font style="color:#5090c1">' . lang_get('steps_to_reproduce') . '</font><br>': '')  . '
                                     ' . (!is_blank($t_row['xdata3']) ? htmlspecialchars($t_row['xdata3']) : '')  . '
                                 </td>' . 
-                                ($t_user_has_edit_access ? '<td width="55"><a class="btn btn-xs btn-primary btn-white btn-round" href="' . plugin_page('delete') . 
-                                    '&tab=' . urlencode($p_current_tab) . '&id=' . $t_row['id'] . '&action=' . $p_section_name . '">' . lang_get('delete_link') . '</a></td>' : '') . '
+                                ($t_user_has_edit_access ? '<td width="55">' . get_button_delete($p_current_tab, 'delete_log', $t_row['id']) . '</td>' : '') . '
                             </tr>';
         }
     }
@@ -214,11 +309,12 @@ function print_log_section($p_section_name, $p_current_tab)
 }
 
 
-function print_save_button_footer()
+function print_save_button_footer($p_action)
 {
     echo '<div class="widget-toolbox padding-8 clearfix">
+        <input type="hidden" name="action" value="' . $p_action . '" />
         <input type="submit" class="btn btn-primary btn-white btn-round" value="' . lang_get('save') . '" />
-    </div>';
+    </div><div class="space-10"></div>';
 }
 
 
@@ -309,6 +405,25 @@ function print_tab($p_tab_title, $p_current_tab_title)
 }
 
 
+function print_tag_blocked_email($p_email_address, $p_removable = true)
+{  
+    echo '<form id="form_' . $p_email_address . '" method="post" action="' . plugin_page('securityextend_edit') . '" title= "
+                ' . ($p_removable ? lang_get('delete_link') . ' ' : '') . '" class="form-inline padding-right-2">
+                ' . form_security_field('plugin_SecurityExtend_securityextend_edit') . '
+                <input type="hidden" name="action" value="delete_account_blocked_email" />
+                <input type="hidden" name="tab" value="Account Block" />
+                <input type="hidden" name="id" value="0" />
+                <input type="hidden" name="param" value="' . $p_email_address . '" />
+            </form>';
+    echo '<button class="btn btn-primary btn-sm btn-white btn-round" onclick="document.getElementById(\'form_' . $p_email_address . '\').submit()">';
+    echo $p_email_address;
+    if ($p_removable) {
+        echo ' <i class="fa fa-times"></i>';
+    }
+    echo '</a>';
+}
+
+
 function print_tab_bar()
 {
     $t_first_tab_title = plugin_lang_get('management_info_title');
@@ -322,7 +437,7 @@ function print_tab_bar()
     
     print_tab($t_first_tab_title, $t_current_tab);
     print_tab(plugin_lang_get('management_block_bug_title'), $t_current_tab);
-    print_tab(plugin_lang_get('management_block_domain_title'), $t_current_tab);
+    print_tab(plugin_lang_get('management_block_account_title'), $t_current_tab);
     print_tab(plugin_lang_get('management_log_title'), $t_current_tab);
 
     echo '</ul>' . "\n<br />";

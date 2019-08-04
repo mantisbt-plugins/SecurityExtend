@@ -19,12 +19,7 @@ $t_current_tab = print_tab_bar();
 
 <div class="col-xs-12">
     <div id="config-div" class="form-container">
-        <form method="post" enctype="multipart/form-data" action="<?php echo plugin_page('securityextend_edit') ?>">
-
 <?php
-        echo form_security_field('plugin_SecurityExtend_securityextend_edit');
-        echo '<input type="hidden" name="tab" value="' . $t_current_tab . '">';
-
         #
         # 'Info' tab
         #
@@ -39,18 +34,29 @@ $t_current_tab = print_tab_bar();
         #
         if ($t_current_tab === plugin_lang_get('management_block_bug_title'))
         {
+            echo '<form method="post" enctype="multipart/form-data" action="' . plugin_page('securityextend_edit'). '">';
+            echo form_security_field('plugin_SecurityExtend_securityextend_edit');
+            echo '<input type="hidden" name="tab" value="' . $t_current_tab . '" />';
+            echo '<input type="hidden" name="id" value="0" />';
             print_textarea_section('block_bug', 'fa-bug');
             print_textarea_section('block_bug_disable_user', 'fa-bug');
             print_textarea_section('block_bug_delete_user', 'fa-bug');
-            print_save_button_footer();
+            print_save_button_footer('save_bug_block');
+            echo '</form>';
         }
         #
         # 'Block domain' tab
         #
-        else if ($t_current_tab === plugin_lang_get('management_block_domain_title'))
+        else if ($t_current_tab === plugin_lang_get('management_block_account_title'))
         {
-            print_textarea_section('block_domain', 'fa-envelope');
-            print_save_button_footer();
+            echo '<form method="post" enctype="multipart/form-data" action="' . plugin_page('securityextend_edit'). '">';
+            echo form_security_field('plugin_SecurityExtend_securityextend_edit');
+            echo '<input type="hidden" name="tab" value="' . $t_current_tab . '" />';
+            echo '<input type="hidden" name="id" value="0" />';
+            print_textarea_section('block_account_domain', 'fa-envelope');
+            print_save_button_footer('save_account_block');
+            echo '</form>';
+            print_blocked_email_section();
         }
         #
         # 'Log' tab
@@ -62,7 +68,6 @@ $t_current_tab = print_tab_bar();
             print_log_section('block_bug_delete_user', $t_current_tab);
         }
 ?>
-        </form>
     </div>
     <div class="space-10"></div>
 </div>
