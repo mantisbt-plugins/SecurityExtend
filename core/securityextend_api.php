@@ -420,7 +420,7 @@ function print_tag_blocked_email($p_email_address, $p_removable = true)
     if ($p_removable) {
         echo ' <i class="fa fa-times"></i>';
     }
-    echo '</a>';
+    echo '</button>';
 }
 
 
