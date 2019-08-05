@@ -424,7 +424,7 @@ function print_section($p_section_name, $p_content, $p_fa_icon = 'fa-bug')
             <div class="widget-main no-padding">
                 <div class="form-container">
                     <div class="table-responsive">
-                        <table class="table table-bordered table-condensed table-striped">
+                        <table class="table table-bordered table-condensed">
                             <fieldset>
                                 <tr>
                                     <td>
