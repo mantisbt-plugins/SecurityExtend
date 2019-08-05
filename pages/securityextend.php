@@ -45,6 +45,7 @@ echo '<div hidden title="' . plugin_lang_get('management_confirm_clear') . '" id
 			$t_html = str_replace("&amp;gt;", "&gt;", $t_html);
 			$t_html = str_replace("&amp;lt;", "&lt;", $t_html);
 			$t_html = str_replace("&amp;quot;", "&quot;", $t_html);
+            $t_html = str_replace('="res/', '="' . helper_mantis_url('plugins/SecurityExtend/res/'), $t_html);
 
             print_section('info', $t_html, 'fa-book');
             echo '<div class="space-10"></div>';
