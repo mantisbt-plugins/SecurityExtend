@@ -15,7 +15,7 @@ class SecurityExtendPlugin extends MantisPlugin
         $this->description = plugin_lang_get("description");
         $this->page = 'config';
 
-        $this->version = "1.2.0";
+        $this->version = "1.1.0";
         $this->requires = array(
             "MantisCore" => "2.0.0",
         );
@@ -53,11 +53,17 @@ class SecurityExtendPlugin extends MantisPlugin
             'EVENT_MENU_MANAGE' => 'securityextend_menu',
             'EVENT_REPORT_BUG_DATA' => 'securityextend_bug_report',
             'EVENT_UPDATE_BUG_DATA' => 'securityextend_bug_update',
-            'EVENT_MANAGE_USER_CREATE' => 'securityextend_user_create'
+            'EVENT_MANAGE_USER_CREATE' => 'securityextend_user_create',
+            'EVENT_CORE_HEADERS' => 'csp_headers'
 		);
     }
-    
 
+
+    function csp_headers() 
+    {
+		http_csp_add( 'img-src', 'https://img.shields.io/' );
+    }
+    
     function securityextend_menu() 
     {
         if (access_has_global_level(plugin_config_get('view_threshold_level'))) {

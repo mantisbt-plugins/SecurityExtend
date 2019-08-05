@@ -18,8 +18,8 @@ $s_plugin_SecurityExtend_management_title = 'Security Extend';
 $s_plugin_SecurityExtend_management_confirm_clear = 'Are you sure you want clear/delete all items?';
 
 $s_plugin_SecurityExtend_management_info_title = 'Info';
-$s_plugin_SecurityExtend_management_info_label = 'Readme';
-$s_plugin_SecurityExtend_management_info_changelog_label = 'Changelog';
+$s_plugin_SecurityExtend_management_info_label = 'README.md';
+$s_plugin_SecurityExtend_management_info_changelog_label = 'CHANGELOG.md';
 
 $s_plugin_SecurityExtend_management_block_bug_title = 'Bug Block';
 $s_plugin_SecurityExtend_management_block_bug_label = 'Bug Block';
