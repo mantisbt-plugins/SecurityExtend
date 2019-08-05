@@ -41,6 +41,7 @@ class SecurityExtendPlugin extends MantisPlugin
             'view_threshold_level'	=> MANAGER,
             'block_bug' => ON,
             'block_bugnote' => ON,
+            'block_bug_duplicate' => ON,
             'show_bird_on_bug_block' => OFF
 		);
 	}

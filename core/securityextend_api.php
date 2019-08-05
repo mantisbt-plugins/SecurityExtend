@@ -35,6 +35,49 @@ function block_bug($p_bug)
     block_bug_kind($p_bug, 'block_bug_delete_user');
     block_bug_kind($p_bug, 'block_bug_disable_user');
     block_bug_kind($p_bug, 'block_bug');
+    block_bug_duplicates($p_bug);
+}
+
+
+function block_bug_duplicates($p_bug) 
+{
+    if (plugin_config_get('block_bug_duplicate') == OFF) {
+        return;
+    }
+
+    $t_bug_count = 0;
+    $t_rows = filter_get_bug_rows(1, 10, 1, $t_bug_count);
+
+	if ($t_rows != null) 
+	{
+		$t_user_id = auth_get_current_user_id();
+        $t_user_name = user_get_username($t_user_id);
+        $t_user_email = user_get_email($t_user_id);
+
+		foreach ($t_rows as $t_bug)
+		{
+            $t_is_dup = ($t_bug->summary == $p_bug->summary && $t_bug->description == $p_bug->description);
+            #$t_is_dup = $t_is_dup  || (strstr($t_bug->summary, $p_bug->summary) != false && strstr($t_bug->description, $p_bug->description) != false);
+            #$t_is_dup = $t_is_dup  || (strstr($p_bug->summary, $t_bug->summary) != false && strstr($p_bug->description, $t_bug->description) != false);
+
+            if ($t_is_dup) 
+            {
+                auth_logout();
+                save_config_value('block_account_email_address', $t_user_email);
+                user_set_field($t_user_id, 'enabled', 0);
+                #user_delete( $t_user_id );
+                log_securityextend_event($t_user_name, $t_user_email, 'block_bug_disable_user', 'Duplicate summary and description', $p_bug->summary, $p_bug->description);
+                #log_securityextend_event($t_user_name, $t_user_email, 'block_bug_delete_user', 'Duplicate summary and description', $p_bug->summary, $p_bug->description);
+
+                if (!plugin_config_get('show_bird_on_bug_block')) {
+                    print_header_redirect('');
+                }
+                else {
+                    print_header_redirect(plugin_page('thebird', true));
+                }
+            }
+        }
+	}
 }
 
 

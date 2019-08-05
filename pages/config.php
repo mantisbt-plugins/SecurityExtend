@@ -35,7 +35,7 @@ $block_bugnote = plugin_config_get('block_bugnote');
 								<table class="table table-bordered table-condensed table-striped">
 									<fieldset>
 										<tr <?php echo helper_alternate_class() ?>>
-											<td class="category" width="200">
+											<td class="category" width="250">
 												<?php echo lang_get('custom_field_access_level_r') ?>
 											</td>
 											<td>
@@ -45,7 +45,7 @@ $block_bugnote = plugin_config_get('block_bugnote');
 											</td>
 										</tr>
 										<tr <?php echo helper_alternate_class() ?>>
-											<td class="category" width="200">
+											<td class="category" width="250">
 												<?php echo lang_get('custom_field_access_level_rw') ?>
 											</td>
 											<td>
@@ -55,7 +55,16 @@ $block_bugnote = plugin_config_get('block_bugnote');
 											</td>
 										</tr>
 										<tr <?php echo helper_alternate_class() ?>>
-											<td class="category" width="200">
+											<td class="category" width="250">
+												<?php echo plugin_lang_get('config_block_bug_duplicate'); ?><br>
+												<span class="required"> * <?php echo plugin_lang_get('config_block_bug_duplicate_note') ?></span>
+											</td>
+											<td>
+												<input type="checkbox" name="block_bug_duplicate" <?php if (plugin_config_get('block_bug_duplicate', ON) == ON) echo ' checked="checked"' ?> />
+											</td>
+										</tr>
+										<tr <?php echo helper_alternate_class() ?>>
+											<td class="category" width="250">
 												<?php echo plugin_lang_get('config_show_bird_on_bug_block'); ?><br>
 												<span class="required"> * <?php echo plugin_lang_get('config_show_bird_on_bug_block_note') ?></span>
 											</td>
