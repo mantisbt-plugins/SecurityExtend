@@ -23,7 +23,7 @@
     - [Usage - Account Blocker](#Usage---Account-Blocker)
   - [Logging](#Logging)
   - [Screenshots](#Screenshots)
-    - [Screenshots - Editor Screen](#Screenshots---Editor-Screen)
+    - [Screenshots - Bug Block Configuration](#Screenshots---Bug-Block-Configuration)
     - [Screenshots - Log](#Screenshots---Log)
     - [Screenshots - The Bird Page](#Screenshots---The-Bird-Page)
   - [Todos](#Todos)
@@ -111,7 +111,7 @@ All triggered events are logged and can be viewed in the `Log` tab, see the [scr
 
 ## Screenshots
 
-### Screenshots - Editor Screen
+### Screenshots - Bug Block Configuration
 
 ![Editor Page](res/bugblock.png)
 
