@@ -129,9 +129,13 @@ function check_text($p_bug, $p_regex, $p_text, $p_disable_user = false, $p_delet
             $t_user_name = user_get_username($t_user_id);
             $t_user_email = user_get_email($t_user_id);
 
+            $t_summary_fmt = (!is_blank($p_bug->summary) ? '<font style="color:#5090c1">' . lang_get('summary') . '</font><br>' . $p_bug->summary : '');
+            $t_description_fmt = (!is_blank($p_bug->description) ? '<font style="color:#5090c1">' . lang_get('description') . '</font><br>' . $p_bug->description : '');
+            $t_steps_to_reproduce_fmt = (!is_blank($p_bug->steps_to_reproduce) ? '<font style="color:#5090c1">' . lang_get('steps_to_reproduce') . '</font><br>' . $p_bug->steps_to_reproduce : '');
+
             if (!$p_disable_user && !$p_delete_user) 
             {
-                log_securityextend_event($t_user_name, $t_user_email, 'block_bug', $p_bug->summary, $p_bug->description, $p_bug->steps_to_reproduce);
+                log_securityextend_event($t_user_name, $t_user_email, 'block_bug', $t_summary_fmt , $t_description_fmt, $t_steps_to_reproduce_fmt);
                 trigger_error(ERROR_SPAM_SUSPECTED, ERROR);
             }
             else 
@@ -143,12 +147,12 @@ function check_text($p_bug, $p_regex, $p_text, $p_disable_user = false, $p_delet
                 if ($p_disable_user) 
                 {
                     user_set_field($t_user_id, 'enabled', 0);
-                    log_securityextend_event($t_user_name, $t_user_email, 'block_bug_disable_user', $p_bug->summary, $p_bug->description, $p_bug->steps_to_reproduce);
+                    log_securityextend_event($t_user_name, $t_user_email, 'block_bug_disable_user', $t_summary_fmt, $t_description_fmt, $t_steps_to_reproduce_fmt);
                 }
                 else 
                 {
                     user_delete( $t_user_id );
-                    log_securityextend_event($t_user_name, $t_user_email, 'block_bug_delete_user', $p_bug->summary, $p_bug->description, $p_bug->steps_to_reproduce);
+                    log_securityextend_event($t_user_name, $t_user_email, 'block_bug_delete_user', $t_summary_fmt, $t_description_fmt, $t_steps_to_reproduce_fmt);
                 }
 
                 if (!plugin_config_get('show_bird_on_bug_block')) {
@@ -362,12 +366,9 @@ function print_log_section($p_section_name, $p_current_tab)
                                     ' . $t_row['email']. '
                                 </td>
                                 <td>
-                                    ' . (!is_blank($t_row['xdata1']) ? '<font style="color:#5090c1">' . lang_get('summary') . '</font><br>' : '')  . '
                                     ' . (!is_blank($t_row['xdata1']) ? htmlspecialchars($t_row['xdata1']) : '')  . '
-                                    ' . (!is_blank($t_row['xdata2']) ? '<br><font style="color:#5090c1">' . lang_get('description') . '</font><br>' : '')  . '
-                                    ' . (!is_blank($t_row['xdata2']) ? htmlspecialchars($t_row['xdata2']) : '')  . '
-                                    ' . (!is_blank($t_row['xdata3']) ? '<br><font style="color:#5090c1">' . lang_get('steps_to_reproduce') . '</font><br>': '')  . '
-                                    ' . (!is_blank($t_row['xdata3']) ? htmlspecialchars($t_row['xdata3']) : '')  . '
+                                    ' . (!is_blank($t_row['xdata2']) ? '<br>'.htmlspecialchars($t_row['xdata2']) : '')  . '
+                                    ' . (!is_blank($t_row['xdata3']) ? '<br>'.htmlspecialchars($t_row['xdata3']) : '')  . '
                                 </td>' . 
                                 ($t_user_has_edit_access ? '<td width="55">' . get_button_delete($p_current_tab, 'delete_log', $t_row['id']) . '</td>' : '') . '
                             </tr>';
