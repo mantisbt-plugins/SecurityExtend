@@ -1,6 +1,6 @@
-# SecurityExtend MantisBT Plugin - Stop and Frustrate Spammers
+# SecurityExtend MantisBT Plugin
 
-![app-type](https://img.shields.io/badge/category-mantisbt%20plugins-blue.svg)
+![app-type](https://img.shields.io/badge/category-mantisbt%20plugins%20anti--spam-blue.svg)
 ![app-lang](https://img.shields.io/badge/language-php-blue.svg)
 [![app-publisher](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-app--publisher-e10000.svg)](https://github.com/spmeesseman/app-publisher)
 [![authors](https://img.shields.io/badge/authors-scott%20meesseman-6F02B5.svg?logo=visual%20studio%20code)](https://github.com/spmeesseman)
