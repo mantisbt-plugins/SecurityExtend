@@ -72,21 +72,39 @@ class SecurityExtendPlugin extends MantisPlugin
 
     function securityextend_bug_report($p_event, $p_bug) 
     {
-        block_bug($p_bug);
+        $t_user_id = auth_get_current_user_id();
+        $t_access_level = access_get_global_level($t_user_id);
+
+        if ($t_access_level <= config_get('default_new_account_access_level')) {
+            block_bug($p_bug);
+        }
+        
         return $p_bug;
     }
     
 
     function securityextend_bug_update($p_event, $p_updated_bug, $p_existing_bug) 
     {
-        block_bug($p_updated_bug);
+        $t_access_level = access_get_global_level();
+
+        if ($t_access_level <= config_get('default_new_account_access_level')) {
+            block_bug($p_updated_bug);
+        }
+        
         return $p_updated_bug;
     }
 
 
     function securityextend_user_create($p_event, $p_user_id) 
     {
-        block_account($p_user_id);
+        $t_access_level = access_get_global_level($p_user_id);
+        $t_new_account_access_level = config_get('default_new_account_access_level');
+        $t_logged_in_user_access_level = access_get_global_level();
+
+        if ($t_logged_in_user_access_level == false || ($t_access_level <= $t_new_account_access_level && $t_logged_in_user_access_level < ADMINISTRATOR)) {
+            block_account($p_user_id);
+        }
+        
         return $p_user_id;
     }
 
