@@ -12,7 +12,7 @@
 [![MantisBT version current](https://app1.spmeesseman.com/projects/plugins/ApiExtend/api/versionbadge/SecurityExtend/current)](https://app1.spmeesseman.com/projects/set_project.php?project=SecurityExtend&make_default=no&ref=plugin.php?page=Releases/releases)
 [![MantisBT version next](https://app1.spmeesseman.com/projects/plugins/ApiExtend/api/versionbadge/SecurityExtend/next)](https://app1.spmeesseman.com/projects/set_project.php?project=SecurityExtend&make_default=no&ref=plugin.php?page=Releases/releases)
 
-- [SecurityExtend MantisBT Plugin - Stop and Frustrate Spammers](#SecurityExtend-MantisBT-Plugin---Stop-and-Frustrate-Spammers)
+- [SecurityExtend MantisBT Plugin](#SecurityExtend-MantisBT-Plugin)
   - [Description](#Description)
   - [Installation](#Installation)
   - [Issues and Feature Requests](#Issues-and-Feature-Requests)
