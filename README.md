@@ -17,7 +17,7 @@
   - [Installation](#Installation)
   - [Issues and Feature Requests](#Issues-and-Feature-Requests)
   - [Configuration](#Configuration)
-    - [Configuration - General Security (config_inc.php)](#Configuration---General-Security-configincphp)
+    - [Configuration - General Security (config_inc)](#Configuration---General-Security-configinc)
   - [Usage](#Usage)
     - [Usage - Bug Blocker](#Usage---Bug-Blocker)
     - [Usage - Account Blocker](#Usage---Account-Blocker)
@@ -62,7 +62,7 @@ You can set access rights for viewing and/or editing the SecurityExtend options 
 
 The `Show bird on bug block` option will show a nice little goodbye image to a spammer for a few seconds before booting them to the login page, see the [screenshot](#Screenshots---The-Bird-Page) below.
 
-### Configuration - General Security (config_inc.php)
+### Configuration - General Security (config_inc)
 
 Some additional options that should be set to prevent spammers from posting content to your site:
 
