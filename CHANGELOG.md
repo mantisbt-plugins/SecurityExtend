@@ -1,5 +1,16 @@
 # SECURITYEXTEND CHANGE LOG
 
+## Version 1.2.0 (August 4th, 2019)
+
+### Features
+
+- **bug blocking:** add support to block issue/bug report on a duplicate summary and description(script attack).
+
+### Refactoring
+
+- **general:** dont run blocking checks if the user has a threshhold higher than g_default_new_account_access_level
+- **logging:** modify log display to allow for display of different types of bug blocking events
+
 ## Version 1.1.0 (August 4th, 2019)
 
 ### Documentation
