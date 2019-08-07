@@ -62,14 +62,25 @@ You can set access rights for viewing and/or editing the SecurityExtend options 
 
 The `Show bird on bug block` option will show a nice little goodbye image to a spammer for a few seconds before booting them to the login page, see the [screenshot](#Screenshots---The-Bird-Page) below.
 
+Note that if you have the **Content-Security-Policy** header set within your config_inc.php **$g_custom_headers** config parameter, then you will need to add the https://img.shields.io/ url to the **img-src** section to be able to see badges in the Info page, for example:
+
+    $g_custom_headers = array(
+        "Content-Security-Policy: " .
+        "frame-src http://gist-it.appshot.com/ 'self'; " .
+        "img-src https://img.shields.io/ https://secure.gravatar.com/ 'self' data:; default-src 'self'; frame-ancestors 'self'; " .
+        "font-src 'self'; " .
+        "style-src 'self'; " .
+        "script-src https://cdnjs.cloudflare.com/ http://gist-it.appspot.com/ 'self' 'unsafe-inline'"
+    );
+
 ### Configuration - General Security
 
 Some additional options that should be set in **config/config_inc.php** to help prevent spammers from posting content to your site:
 
-1. Set the **\$g_email_ensure_unique** parameter to `ON` (default is `ON`)
-2. Set the **\$g_tag_create_threshhold** parameter to an access level greater than that of **\$g_default_new_account_access_level**
-3. Set the **\$g_antispam_max_event_count** parameter to something lower than the default **10**, or adjust accordingly.
-4. Set the **\$g_antispam_time_window_in_seconds** to something lower than the default **3600**, or adjust accordingly.
+1. Set the **$g_email_ensure_unique** parameter to `ON` (default is `ON`)
+2. Set the **$g_tag_create_threshhold** parameter to an access level greater than that of **\$g_default_new_account_access_level**
+3. Set the **$g_antispam_max_event_count** parameter to something lower than the default **10**, or adjust accordingly.
+4. Set the **$g_antispam_time_window_in_seconds** to something lower than the default **3600**, or adjust accordingly.
 
 ## Usage
 
