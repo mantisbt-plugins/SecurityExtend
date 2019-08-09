@@ -13,7 +13,7 @@
         "cmd /c copy /Y LICENSE.txt build\\SecurityExtend",
         "cmd /c copy /Y SecurityExtend.php build\\SecurityExtend",
         "Compress-Archive -Path build\\SecurityExtend -Update -CompressionLevel Optimal -DestinationPath build\\SecurityExtend.zip",
-        "tar -czf build/SecurityExtend.tgz build\\SecurityExtend",
+        "tar -C build -czf build/SecurityExtend.tgz SecurityExtend",
         "cmd /c rmdir /S /Q build\\SecurityExtend"
     ],
     "changelogFile":     "CHANGELOG.md",
