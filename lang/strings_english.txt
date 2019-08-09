@@ -9,6 +9,10 @@ $s_plugin_SecurityExtend_config = 'Configuration';
 $s_plugin_SecurityExtend_update_config = 'Update Configuration';
 $s_plugin_SecurityExtend_config_block_bug_duplicate_note = 'Will disable user account on block';
 $s_plugin_SecurityExtend_config_block_bug_duplicate = 'Block duplicate summary/description';
+$s_plugin_SecurityExtend_config_disable_user_on_antispam = 'Disable User on Antispam trigger';
+$s_plugin_SecurityExtend_config_disable_user_on_antispam_note = 'Uses anti-spam setting in config_inc.php';
+$s_plugin_SecurityExtend_config_clean_on_antispam = 'Clean on Antispam trigger';
+$s_plugin_SecurityExtend_config_clean_on_antispam_note = 'Deletes all user reported bugs and bugnotes';
 $s_plugin_SecurityExtend_config_show_bird_on_bug_block = 'Show bird on bug block';
 $s_plugin_SecurityExtend_config_show_bird_on_bug_block_note = 'On disable or delete account';
 $s_plugin_SecurityExtend_show_bird_on_bug_block_label = 'See ya...';
@@ -23,11 +27,26 @@ $s_plugin_SecurityExtend_management_info_changelog_label = 'CHANGELOG.md';
 
 $s_plugin_SecurityExtend_management_block_bug_title = 'Bug Block';
 $s_plugin_SecurityExtend_management_block_bug_label = 'Bug Block';
-$s_plugin_SecurityExtend_management_block_bug_description = 'A comma separated list of keywords and phrases that will block issues from being created/updated';
+$s_plugin_SecurityExtend_management_block_bug_description = 'A comma separated list of keywords and phrases that will block issues and bugnotes from being created/updated';
 $s_plugin_SecurityExtend_management_block_bug_disable_user_label = 'Bug Block &amp; Disable User';
-$s_plugin_SecurityExtend_management_block_bug_disable_user_description = 'A comma separated list of keywords and phrases that will block issues from being created/updated and disable the offending user account';
+$s_plugin_SecurityExtend_management_block_bug_disable_user_description = 'A comma separated list of keywords and phrases that will block issues and bugnotes from being created/updated and disable the offending user account';
 $s_plugin_SecurityExtend_management_block_bug_delete_user_label = 'Bug Block &amp; Delete User';
-$s_plugin_SecurityExtend_management_block_bug_delete_user_description = 'A comma separated list of keywords and phrases that will block issues from being created/updated and delete the offending user account';
+$s_plugin_SecurityExtend_management_block_bug_delete_user_description = 'A comma separated list of keywords and phrases that will block issues and bugnotes from being created/updated and delete the offending user account';
+
+$s_plugin_SecurityExtend_management_block_bugnote_title = 'Bug Note Block';
+$s_plugin_SecurityExtend_management_block_bugnote_label = 'Bug Note Block';
+$s_plugin_SecurityExtend_management_block_bugnote_description = $s_plugin_SecurityExtend_management_block_bug_description;
+$s_plugin_SecurityExtend_management_block_bugnote_disable_user_label = 'Bug Note Block &amp; Disable User';
+$s_plugin_SecurityExtend_management_block_bugnote_disable_user_description = $s_plugin_SecurityExtend_management_block_bug_disable_user_description;
+$s_plugin_SecurityExtend_management_block_bugnote_delete_user_label = 'Bug Note Block &amp; Delete User';
+$s_plugin_SecurityExtend_management_block_bugnote_delete_user_description = $s_plugin_SecurityExtend_management_block_bug_delete_user_description;
+
+$s_plugin_SecurityExtend_management_antispam_count_title = 'Anti-Spam Trigger';
+$s_plugin_SecurityExtend_management_antispam_count_label = 'Anti-Spam Trigger';
+$s_plugin_SecurityExtend_management_antispam_count_disable_user_label = 'AntiSpam Trigger &amp; Disable User';
+$s_plugin_SecurityExtend_management_antispam_count_disable_user_description = 'Anti-Spam Triggers - with disabled user account' ;
+$s_plugin_SecurityExtend_management_antispam_count_delete_user_label = 'AntiSpam Trigger &amp; Delete User';
+$s_plugin_SecurityExtend_management_antispam_count_delete_user_description = 'Anti-Spam Triggers - with deleted user account';
 
 $s_plugin_SecurityExtend_management_block_account_title = 'Account Block';
 $s_plugin_SecurityExtend_management_block_account_domain_label = 'Account Block Domains';
@@ -39,9 +58,24 @@ $s_plugin_SecurityExtend_management_log_title = 'Log';
 $s_plugin_SecurityExtend_management_log_clear= 'Clear';
 $s_plugin_SecurityExtend_management_log_block_account_email_address_label = $s_plugin_SecurityExtend_management_block_account_blocked_email_label;
 $s_plugin_SecurityExtend_management_log_block_account_email_address_description = 'Account sign-ups blocked with exising blacklisted email addresses';
+
 $s_plugin_SecurityExtend_management_log_block_bug_label = $s_plugin_SecurityExtend_management_block_bug_label;
 $s_plugin_SecurityExtend_management_log_block_bug_description = 'Issues blocked from being created/updated - with spam warning';
 $s_plugin_SecurityExtend_management_log_block_bug_disable_user_label = $s_plugin_SecurityExtend_management_block_bug_disable_user_label;
 $s_plugin_SecurityExtend_management_log_block_bug_disable_user_description = 'Issues blocked from being created/updated - with disabled user account';
 $s_plugin_SecurityExtend_management_log_block_bug_delete_user_label = $s_plugin_SecurityExtend_management_block_bug_delete_user_label;
 $s_plugin_SecurityExtend_management_log_block_bug_delete_user_description = 'Issues blocked from being created/updated - with deleted user account';
+
+$s_plugin_SecurityExtend_management_log_block_bugnote_label = $s_plugin_SecurityExtend_management_block_bugnote_label;
+$s_plugin_SecurityExtend_management_log_block_bugnote_description = 'Notes blocked from being created/updated - with spam warning';
+$s_plugin_SecurityExtend_management_log_block_bugnote_disable_user_label = $s_plugin_SecurityExtend_management_block_bugnote_disable_user_label;
+$s_plugin_SecurityExtend_management_log_block_bugnote_disable_user_description = 'Notes blocked from being created/updated - with disabled user account';
+$s_plugin_SecurityExtend_management_log_block_bugnote_delete_user_label = $s_plugin_SecurityExtend_management_block_bugnote_delete_user_label;
+$s_plugin_SecurityExtend_management_log_block_bugnote_delete_user_description = 'Notes blocked from being created/updated - with deleted user account';
+
+$s_plugin_SecurityExtend_management_log_antispam_count_label = $s_plugin_SecurityExtend_management_antispam_count_label;
+$s_plugin_SecurityExtend_management_log_antispam_count_description = 'Anti-Spam trigger - with spam warning';
+$s_plugin_SecurityExtend_management_log_antispam_count_disable_user_label = $s_plugin_SecurityExtend_management_antispam_count_disable_user_label;
+$s_plugin_SecurityExtend_management_log_antispam_count_disable_user_description = $s_plugin_SecurityExtend_management_antispam_count_disable_user_description;
+$s_plugin_SecurityExtend_management_log_antispam_count_delete_user_label = $s_plugin_SecurityExtend_management_antispam_count_delete_user_label;
+$s_plugin_SecurityExtend_management_log_antispam_count_delete_user_description = $s_plugin_SecurityExtend_management_antispam_count_delete_user_description;

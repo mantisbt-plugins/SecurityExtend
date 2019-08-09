@@ -19,14 +19,14 @@ if ($f_action == 'save_bug_block')
     $f_block_bug_disable_user = gpc_get_string('block_bug_disable_user');
     $f_block_bug_delete_user = gpc_get_string('block_bug_delete_user');
 
-    save_config_value('block_bug', $f_block_bug);
-    save_config_value('block_bug_disable_user', $f_block_bug_disable_user);
-    save_config_value('block_bug_delete_user', $f_block_bug_delete_user);
+    se_save_config_value('block_bug', $f_block_bug);
+    se_save_config_value('block_bug_disable_user', $f_block_bug_disable_user);
+    se_save_config_value('block_bug_delete_user', $f_block_bug_delete_user);
 }
 else if ($f_action == 'save_account_block')
 {
     $f_block_account= gpc_get_string('block_account_domain');
-    save_config_value('block_account_domain', $f_block_account);
+    se_save_config_value('block_account_domain', $f_block_account);
 }
 else if ($f_action == 'delete_log') 
 {
@@ -53,7 +53,7 @@ else if ($f_action == 'delete_log')
 else if ($f_action == 'add_account_blocked_email')
 {
     $f_param = gpc_get_string('param');
-    save_config_value('block_account_email_address', $f_param);
+    se_save_config_value('block_account_email_address', $f_param);
 }
 else if ($f_action == 'delete_account_blocked_email') 
 {
@@ -62,7 +62,7 @@ else if ($f_action == 'delete_account_blocked_email')
     $result = db_query($query);
 }
 else {
-    print_failure_and_redirect($t_redirect_url);
+    se_print_failure_and_redirect($t_redirect_url);
 }
 
 #
@@ -71,4 +71,4 @@ else {
 
 form_security_purge('plugin_SecurityExtend_securityextend_edit');
 
-print_success_and_redirect($t_redirect_url);
+se_print_success_and_redirect($t_redirect_url);

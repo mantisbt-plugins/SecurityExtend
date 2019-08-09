@@ -1,6 +1,7 @@
 <?php
 
 require_once('core.php');
+require_once('filter_api.php');
 require_once('securityextend_api.php');
 require_once('parsedown.php');
 require_once('parsedown-toc.php');
@@ -18,7 +19,7 @@ print_manage_menu('SecurityExtend/securityextend');
 $keywords_block_bug = '';
 $keywords_block_bugnote = '';
 
-$t_current_tab = print_tab_bar();
+$t_current_tab = se_print_tab_bar();
 
 echo '<div hidden title="' . plugin_lang_get('management_confirm_clear') . '" id="securityextend_confirm_clear"></div>';
 
@@ -47,7 +48,7 @@ echo '<div hidden title="' . plugin_lang_get('management_confirm_clear') . '" id
 			$t_html = str_replace("&amp;quot;", "&quot;", $t_html);
             $t_html = str_replace('="res/', '="' . helper_mantis_url('plugins/SecurityExtend/res/'), $t_html);
 
-            print_section('info', $t_html, 'fa-book');
+            se_print_section('info', $t_html, 'fa-book');
             echo '<div class="space-10"></div>';
             
             $Parsedown = new ParsedownEx();
@@ -63,7 +64,7 @@ echo '<div hidden title="' . plugin_lang_get('management_confirm_clear') . '" id
 			$t_html = str_replace("&amp;lt;", "&lt;", $t_html);
             $t_html = str_replace("&amp;quot;", "&quot;", $t_html);
             
-            print_section('info_changelog', $t_html, 'fa-book');
+            se_print_section('info_changelog', $t_html, 'fa-book');
         }
         #
         # 'Block domain' tab
@@ -74,10 +75,10 @@ echo '<div hidden title="' . plugin_lang_get('management_confirm_clear') . '" id
             echo form_security_field('plugin_SecurityExtend_securityextend_edit');
             echo '<input type="hidden" name="tab" value="' . $t_current_tab . '" />';
             echo '<input type="hidden" name="id" value="0" />';
-            print_textarea_section('block_account_domain', 'fa-envelope');
-            print_save_button_footer('save_account_block');
+            se_print_textarea_section('block_account_domain', 'fa-envelope');
+            se_print_save_button_footer('save_account_block');
             echo '</form>';
-            print_blocked_email_section();
+            se_print_blocked_email_section();
         }
         #
         # 'Block bug' tab
@@ -88,10 +89,10 @@ echo '<div hidden title="' . plugin_lang_get('management_confirm_clear') . '" id
             echo form_security_field('plugin_SecurityExtend_securityextend_edit');
             echo '<input type="hidden" name="tab" value="' . $t_current_tab . '" />';
             echo '<input type="hidden" name="id" value="0" />';
-            print_textarea_section('block_bug', 'fa-bug');
-            print_textarea_section('block_bug_disable_user', 'fa-bug');
-            print_textarea_section('block_bug_delete_user', 'fa-bug');
-            print_save_button_footer('save_bug_block');
+            se_print_textarea_section('block_bug', 'fa-bug');
+            se_print_textarea_section('block_bug_disable_user', 'fa-bug');
+            se_print_textarea_section('block_bug_delete_user', 'fa-bug');
+            se_print_save_button_footer('save_bug_block');
             echo '</form>';
         }
         #
@@ -99,10 +100,15 @@ echo '<div hidden title="' . plugin_lang_get('management_confirm_clear') . '" id
         #
         else if ($t_current_tab === plugin_lang_get('management_log_title'))
         {
-            print_log_section('block_account_email_address', $t_current_tab);
-            print_log_section('block_bug', $t_current_tab);
-            print_log_section('block_bug_disable_user', $t_current_tab);
-            print_log_section('block_bug_delete_user', $t_current_tab);
+            se_print_log_section('block_account_email_address', $t_current_tab);
+            se_print_log_section('block_bug', $t_current_tab);
+            se_print_log_section('block_bugnote', $t_current_tab);
+            se_print_log_section('block_bug_disable_user', $t_current_tab);
+            se_print_log_section('block_bugnote_disable_user', $t_current_tab);
+            se_print_log_section('block_bug_delete_user', $t_current_tab);
+            se_print_log_section('block_bugnote_delete_user', $t_current_tab);
+            se_print_log_section('antispam_count_disable_user', $t_current_tab);
+            se_print_log_section('antispam_count_delete_user', $t_current_tab);
         }
 ?>
     </div>

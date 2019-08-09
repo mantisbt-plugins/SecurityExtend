@@ -61,7 +61,7 @@
     "repo":              "https://github.com/mantisbt-plugins/SecurityExtend.git",
     "skipCommit":        "N",
     "skipDeployPush":    "N",
-    "skipVersionEdits":  "Y",
+    "skipVersionEdits":  "N",
     "testEmailRecip":    "spmeesseman@gmail.com",
     "textEditor":        "notepad",
     "vcTag":             "Y",

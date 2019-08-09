@@ -65,6 +65,24 @@ $block_bugnote = plugin_config_get('block_bugnote');
 										</tr>
 										<tr <?php echo helper_alternate_class() ?>>
 											<td class="category" width="250">
+												<?php echo plugin_lang_get('config_disable_user_on_antispam'); ?><br>
+												<span class="required"> * <?php echo plugin_lang_get('config_disable_user_on_antispam_note') ?></span>
+											</td>
+											<td>
+												<input type="checkbox" name="disable_user_on_antispam" <?php if (plugin_config_get('disable_user_on_antispam', ON) == ON) echo ' checked="checked"' ?> />
+											</td>
+										</tr>
+										<tr <?php echo helper_alternate_class() ?>>
+											<td class="category" width="250">
+												<?php echo plugin_lang_get('config_clean_on_antispam'); ?><br>
+												<span class="required"> * <?php echo plugin_lang_get('config_clean_on_antispam_note') ?></span>
+											</td>
+											<td>
+												<input type="checkbox" name="clean_on_antispam" <?php if (plugin_config_get('clean_on_antispam', ON) == ON) echo ' checked="checked"' ?> />
+											</td>
+										</tr>
+										<tr <?php echo helper_alternate_class() ?>>
+											<td class="category" width="250">
 												<?php echo plugin_lang_get('config_show_bird_on_bug_block'); ?><br>
 												<span class="required"> * <?php echo plugin_lang_get('config_show_bird_on_bug_block_note') ?></span>
 											</td>
