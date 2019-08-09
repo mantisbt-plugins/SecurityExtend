@@ -1,11 +1,19 @@
 <?php
 
-function block_account($p_user_id)
+function se_block_account($p_user_id)
 {
     $t_user_name = user_get_username($p_user_id);
     $t_user_email = user_get_email($p_user_id); 
 
-    if (is_email_forbidden($t_user_email))
+    if( !auth_signup_enabled() ) {
+		return;
+	}
+
+	if( access_get_global_level() > auth_signup_access_level() ) {
+		return;
+    }
+    
+    if (se_is_email_forbidden($t_user_email))
     {
         user_delete( $p_user_id );
 
@@ -18,7 +26,7 @@ function block_account($p_user_id)
             }
         }
         
-        log_securityextend_event($t_user_name, $t_user_email, 'block_account_email_address');
+        se_log_event($t_user_name, $t_user_email, 'block_account_email_address');
 
         if (!plugin_config_get('show_bird_on_bug_block')) {
             print_header_redirect('');
@@ -30,24 +38,108 @@ function block_account($p_user_id)
 }
 
 
-function block_bug($p_bug)
+function se_block_bug($p_bug)
 {
-    block_bug_kind($p_bug, 'block_bug_delete_user');
-    block_bug_kind($p_bug, 'block_bug_disable_user');
-    block_bug_kind($p_bug, 'block_bug');
-    block_bug_duplicates($p_bug);
+    if( !auth_signup_enabled() ) {
+		return;
+	}
+
+	if( access_get_global_level() > auth_signup_access_level() ) {
+		return;
+    }
+    
+    se_block_bug_kind($p_bug, 'block_bug_delete_user');
+    se_block_bug_kind($p_bug, 'block_bug_disable_user');
+    se_block_bug_kind($p_bug, 'block_bug');
+    se_block_bug_duplicates($p_bug);
+    se_block_antispam_count();
 }
 
 
-function block_bug_duplicates($p_bug) 
+function se_block_bugnote($p_bugnote_text, $p_bug_id)
+{
+    if( !auth_signup_enabled() ) {
+		return;
+	}
+
+	if( access_get_global_level() > auth_signup_access_level() ) {
+		return;
+    }
+    
+    se_block_bugnote_kind($p_bugnote_text, 'block_bug_delete_user');
+    se_block_bugnote_kind($p_bugnote_text, 'block_bug_disable_user');
+    se_block_bugnote_kind($p_bugnote_text, 'block_bug');
+    se_block_antispam_count($p_bugnote_text);
+}
+
+
+function se_block_antispam_count($p_text = '') 
+{
+    if (plugin_config_get('disable_user_on_antispam') == OFF) {
+        return;
+    }
+
+	$t_antispam_max_event_count = config_get( 'antispam_max_event_count' );
+	if( $t_antispam_max_event_count == 0 ) {
+		return;
+	}
+
+	# Make sure user has at least one more event to add before exceeding the limit, which will happen
+	# after this method returns.
+	#$t_antispam_time_window_in_seconds = config_get( 'antispam_time_window_in_seconds' );
+	#if(history_count_user_recent_events($t_antispam_time_window_in_seconds ) < $t_antispam_max_event_count ) {
+    if (history_count_user_recent_events(plugin_config_get('antispam_seconds')) >= 2) # if theres 2 events in the last 30 seconds, its a spammer
+    {
+        #
+        # If we are here, the spam count max has triggered
+        #
+        $t_user_id = auth_get_current_user_id();
+        $t_user_name = user_get_username($t_user_id);
+        $t_user_email = user_get_email($t_user_id);
+        $t_delete_user = plugin_config_get('delete_user_on_antispam'); // or delete
+
+        #
+        # get all user tickets and notes and delete
+        #
+        # TODO
+
+        auth_logout();
+        save_config_value('block_account_email_address', $t_user_email);
+        
+        if (!$t_delete_user) 
+        {
+            user_set_field($t_user_id, 'enabled', 0);
+            se_log_event($t_user_name, $t_user_email, 'antipam_count_disable_user', $p_text);
+        }
+        else 
+        {
+            user_delete( $t_user_id );
+            se_log_event($t_user_name, $t_user_email, 'antipam_count_delete_user', $p_text);
+        }
+
+        if (!plugin_config_get('show_bird_on_bug_block')) {
+            print_header_redirect('');
+        }
+        else {
+            print_header_redirect(plugin_page('thebird', true));
+        }
+    }
+}
+
+
+function se_block_bug_duplicates($p_bug) 
 {
     if (plugin_config_get('block_bug_duplicate') == OFF) {
         return;
     }
-
+    
+    $t_bug_page_number = 1;
+    $t_bug_per_page = 10;
+    $t_bug_page_count = 1;
     $t_bug_count = 0;
-    $t_rows = filter_get_bug_rows(1, 10, 1, $t_bug_count);
 
+    $t_rows = filter_get_bug_rows($t_bug_page_number, $t_bug_per_page, $t_bug_page_count, $t_bug_count);
+    //$t_rows = mc_filter_get_issues('', '', 0, 0, 1, 10);
 	if ($t_rows != null) 
 	{
 		$t_user_id = auth_get_current_user_id();
@@ -63,11 +155,11 @@ function block_bug_duplicates($p_bug)
             if ($t_is_dup) 
             {
                 auth_logout();
-                save_config_value('block_account_email_address', $t_user_email);
+                se_save_config_value('block_account_email_address', $t_user_email);
                 user_set_field($t_user_id, 'enabled', 0);
                 #user_delete( $t_user_id );
-                log_securityextend_event($t_user_name, $t_user_email, 'block_bug_disable_user', 'Duplicate summary and description', $p_bug->summary, $p_bug->description);
-                #log_securityextend_event($t_user_name, $t_user_email, 'block_bug_delete_user', 'Duplicate summary and description', $p_bug->summary, $p_bug->description);
+                se_log_event($t_user_name, $t_user_email, 'block_bug_disable_user', 'Duplicate summary and description', $p_bug->summary, $p_bug->description);
+                #logevent($t_user_name, $t_user_email, 'block_bug_delete_user', 'Duplicate summary and description', $p_bug->summary, $p_bug->description);
 
                 if (!plugin_config_get('show_bird_on_bug_block')) {
                     print_header_redirect('');
@@ -81,7 +173,7 @@ function block_bug_duplicates($p_bug)
 }
 
 
-function block_bug_kind($p_bug, $p_config_name) 
+function se_block_bug_kind($p_bug, $p_config_name) 
 {
     $query = 'SELECT value FROM ' . plugin_table('config') . " WHERE name='" . $p_config_name . "'";
     $result = db_query($query);
@@ -110,15 +202,49 @@ function block_bug_kind($p_bug, $p_config_name)
         }
         $t_regex = rtrim($t_regex, "|").")+/i";
 
-        check_text($p_bug, $t_regex, $p_bug->summary, $t_disable_user, $t_delete_user);
-        check_text($p_bug, $t_regex, $p_bug->description, $t_disable_user, $t_delete_user);
-        check_text($p_bug, $t_regex, $p_bug->steps_to_reproduce, $t_disable_user, $t_delete_user);
-        check_text($p_bug, $t_regex, $p_bug->additional_information, $t_disable_user, $t_delete_user);
+        se_check_text('block_bug', $t_regex, lang_get('summary'), $p_bug->summary, $t_disable_user, $t_delete_user);
+        se_check_text('block_bug', $t_regex, lang_get('description'), $p_bug->description, $t_disable_user, $t_delete_user);
+        se_check_text('block_bug', $t_regex, lang_get('steps_to_reproduce'), $p_bug->steps_to_reproduce, $t_disable_user, $t_delete_user);
+        se_check_text('block_bug', $t_regex, lang_get('additional_information'), $p_bug->additional_information, $t_disable_user, $t_delete_user);
     }
 }
 
 
-function check_text($p_bug, $p_regex, $p_text, $p_disable_user = false, $p_delete_user = false)
+function se_block_bugnote_kind($p_bugnote, $p_config_name) 
+{
+    $query = 'SELECT value FROM ' . plugin_table('config') . " WHERE name='" . $p_config_name . "'";
+    $result = db_query($query);
+    $row = db_fetch_array($result);
+    if (!$row) {
+        return;
+    }
+
+    $t_value = $row['value'];
+    $t_value = str_replace("\r\n", "", $t_value); # bbcodeplus will add CR
+    $t_value = str_replace("\n", "", $t_value);
+
+    $t_keywords = explode(",", $t_value);
+
+    $t_disable_user = (strpos($p_config_name, "disable") !== false);
+    $t_delete_user = (strpos($p_config_name, "delete") !== false);
+    
+    #
+    # Convert keyword list to regex and apply to bug subject, notes, etc
+    #
+    if (count($t_keywords) > 0 && !is_blank($t_keywords[0]))
+    {
+        $t_regex = "/(";
+        foreach ($t_keywords as $t_keyword) {
+            $t_regex = $t_regex.$t_keyword.'|';
+        }
+        $t_regex = rtrim($t_regex, "|").")+/i";
+
+        se_check_text('block_bugnote', $t_regex, lang_get('bugnote'), $p_bugnote, $t_disable_user, $t_delete_user);
+    }
+}
+
+
+function se_check_text($p_event_name, $p_regex, $p_text_kind, $p_text, $p_disable_user = false, $p_delete_user = false)
 {
     if (!is_blank($p_text)) 
     {
@@ -129,13 +255,9 @@ function check_text($p_bug, $p_regex, $p_text, $p_disable_user = false, $p_delet
             $t_user_name = user_get_username($t_user_id);
             $t_user_email = user_get_email($t_user_id);
 
-            $t_summary_fmt = (!is_blank($p_bug->summary) ? '<font style="color:#5090c1">' . lang_get('summary') . '</font><br>' . $p_bug->summary : '');
-            $t_description_fmt = (!is_blank($p_bug->description) ? '<font style="color:#5090c1">' . lang_get('description') . '</font><br>' . $p_bug->description : '');
-            $t_steps_to_reproduce_fmt = (!is_blank($p_bug->steps_to_reproduce) ? '<font style="color:#5090c1">' . lang_get('steps_to_reproduce') . '</font><br>' . $p_bug->steps_to_reproduce : '');
-
             if (!$p_disable_user && !$p_delete_user) 
             {
-                log_securityextend_event($t_user_name, $t_user_email, 'block_bug', $t_summary_fmt , $t_description_fmt, $t_steps_to_reproduce_fmt);
+                se_log_event($t_user_name, $t_user_email, $p_event_name, $p_text_kind, $p_text);
                 trigger_error(ERROR_SPAM_SUSPECTED, ERROR);
             }
             else 
@@ -147,12 +269,12 @@ function check_text($p_bug, $p_regex, $p_text, $p_disable_user = false, $p_delet
                 if ($p_disable_user) 
                 {
                     user_set_field($t_user_id, 'enabled', 0);
-                    log_securityextend_event($t_user_name, $t_user_email, 'block_bug_disable_user', $t_summary_fmt, $t_description_fmt, $t_steps_to_reproduce_fmt);
+                    se_log_event($t_user_name, $t_user_email, $p_event_name . 'block_bug_disable_user', $p_text_kind, $p_text);
                 }
                 else 
                 {
                     user_delete( $t_user_id );
-                    log_securityextend_event($t_user_name, $t_user_email, 'block_bug_delete_user', $t_summary_fmt, $t_description_fmt, $t_steps_to_reproduce_fmt);
+                    se_log_event($t_user_name, $t_user_email, $p_event_name . '_delete_user', $p_text_kind, $p_text);
                 }
 
                 if (!plugin_config_get('show_bird_on_bug_block')) {
@@ -167,7 +289,7 @@ function check_text($p_bug, $p_regex, $p_text, $p_disable_user = false, $p_delet
 }
 
 
-function get_button_clear($p_tab, $p_action, $p_param = '')
+function se_get_button_clear($p_tab, $p_action, $p_param = '')
 {
     return '<span class="pull-right">
                 <form method="post" action="' . plugin_page('securityextend_edit') . '" title= "' . plugin_lang_get('management_log_clear') . '" class="form-inline">
@@ -182,7 +304,7 @@ function get_button_clear($p_tab, $p_action, $p_param = '')
 }
 
 
-function get_button_delete($p_tab, $p_action, $p_id = 0, $p_param = '')
+function se_get_button_delete($p_tab, $p_action, $p_id = 0, $p_param = '')
 {
     return '<span class="pull-right padding-right-8">
                 <form method="post" action="' . plugin_page('securityextend_edit') . '" title= "' . lang_get('delete_link') . '"  class="form-inline">
@@ -197,7 +319,7 @@ function get_button_delete($p_tab, $p_action, $p_id = 0, $p_param = '')
 }
 
 
-function get_button_add_email()
+function se_get_button_add_email()
 {
     return '<span class="pull-right" style="padding-right:30px">
                 <form method="post" action="' . plugin_page('securityextend_edit') . '" class="form-inline">
@@ -212,7 +334,7 @@ function get_button_add_email()
 }
 
 
-function get_mantis_base_url()
+function se_get_mantis_base_url()
 {
     return sprintf(
       "%s://%s/",
@@ -222,7 +344,7 @@ function get_mantis_base_url()
 }
 
 
-function is_email_forbidden($p_email)
+function se_is_email_forbidden($p_email)
 {
     $t_db_table = plugin_table('config');
     $t_query = "SELECT COUNT(*) FROM $t_db_table WHERE value='$p_email' AND name='block_account_email_address'";
@@ -235,7 +357,7 @@ function is_email_forbidden($p_email)
 }
 
 
-function log_securityextend_event($p_user, $p_email, $p_action, $p_xdata1 = '', $p_xdata2 = '', $p_xdata3 = '')
+function se_log_event($p_user, $p_email, $p_action, $p_xdata1 = '', $p_xdata2 = '', $p_xdata3 = '')
 {
     $t_db_table = plugin_table('log');
     $t_query = "INSERT INTO $t_db_table (user, email, date, action, xdata1, xdata2, xdata3) VALUES (?, ?, NOW(), ?, ?, ?, ?)";
@@ -243,7 +365,7 @@ function log_securityextend_event($p_user, $p_email, $p_action, $p_xdata1 = '', 
 }
 
 
-function print_blocked_email_section()
+function se_print_blocked_email_section()
 {
     $t_block_id = 'plugin_SecurityExtend_log_blocked_email';
     $t_collapse_block = is_collapsed($t_block_id);
@@ -267,8 +389,8 @@ function print_blocked_email_section()
 
         <div class="widget-toolbox padding-8 clearfix">
             ' . plugin_lang_get('management_block_account_blocked_email_description')
-              . get_button_clear('Account Block', 'delete_account_blocked_email') . ' &nbsp;&nbsp;'
-              . get_button_add_email()  . '
+              . se_get_button_clear('Account Block', 'delete_account_blocked_email') . ' &nbsp;&nbsp;'
+              . se_get_button_add_email()  . '
         </div>
 
         <div class="widget-body">
@@ -284,7 +406,7 @@ function print_blocked_email_section()
     } 
     else {
         while ($t_row = db_fetch_array($t_result)) {
-            print_tag_blocked_email($t_row['value'], $t_user_has_edit_access);
+            se_print_tag_blocked_email($t_row['value'], $t_user_has_edit_access);
         }
     }
     echo '   </div>
@@ -294,7 +416,7 @@ function print_blocked_email_section()
 }
 
 
-function print_log_section($p_section_name, $p_current_tab)
+function se_print_log_section($p_section_name, $p_current_tab)
 {
     $t_block_id = 'plugin_SecurityExtend_log_'.$p_section_name;
     $t_collapse_block = is_collapsed($t_block_id);
@@ -318,7 +440,7 @@ function print_log_section($p_section_name, $p_current_tab)
 
         <div class="widget-toolbox padding-8 clearfix">
             ' . plugin_lang_get('management_log_'.$p_section_name.'_description') 
-              . get_button_clear($p_current_tab, 'delete_log', $p_section_name) . '
+              . se_get_button_clear($p_current_tab, 'delete_log', $p_section_name) . '
         </div>
 
         <div class="widget-body">
@@ -370,7 +492,7 @@ function print_log_section($p_section_name, $p_current_tab)
                                     ' . (!is_blank($t_row['xdata2']) ? '<br>'.htmlspecialchars($t_row['xdata2']) : '')  . '
                                     ' . (!is_blank($t_row['xdata3']) ? '<br>'.htmlspecialchars($t_row['xdata3']) : '')  . '
                                 </td>' . 
-                                ($t_user_has_edit_access ? '<td width="55">' . get_button_delete($p_current_tab, 'delete_log', $t_row['id']) . '</td>' : '') . '
+                                ($t_user_has_edit_access ? '<td width="55">' . se_get_button_delete($p_current_tab, 'delete_log', $t_row['id']) . '</td>' : '') . '
                             </tr>';
         }
     }
@@ -385,7 +507,7 @@ function print_log_section($p_section_name, $p_current_tab)
 }
 
 
-function print_save_button_footer($p_action)
+function se_print_save_button_footer($p_action)
 {
     echo '<div class="widget-toolbox padding-8 clearfix">
         <input type="hidden" name="action" value="' . $p_action . '" />
@@ -394,7 +516,7 @@ function print_save_button_footer($p_action)
 }
 
 
-function print_section($p_section_name, $p_content, $p_fa_icon = 'fa-bug')
+function se_print_section($p_section_name, $p_content, $p_fa_icon = 'fa-bug')
 {
     $t_block_id = 'plugin_SecurityExtend_'.$p_section_name;
     $t_collapse_block = is_collapsed($t_block_id);
@@ -442,7 +564,7 @@ function print_section($p_section_name, $p_content, $p_fa_icon = 'fa-bug')
 }
 
 
-function print_failure_and_redirect($p_redirect_url, $p_message = '', $p_die = true)
+function se_print_failure_and_redirect($p_redirect_url, $p_message = '', $p_die = true)
 {
     layout_page_header(null, $p_redirect_url);
     layout_page_begin();
@@ -454,7 +576,7 @@ function print_failure_and_redirect($p_redirect_url, $p_message = '', $p_die = t
 }
 
 
-function print_success_and_redirect($p_redirect_url, $p_message = '', $p_die = false)
+function se_print_success_and_redirect($p_redirect_url, $p_message = '', $p_die = false)
 {
     layout_page_header(null, $p_redirect_url);
     layout_page_begin();
@@ -466,7 +588,7 @@ function print_success_and_redirect($p_redirect_url, $p_message = '', $p_die = f
 }
 
 
-function print_tab($p_tab_title, $p_current_tab_title)
+function se_print_tab($p_tab_title, $p_current_tab_title)
 {
     $t_tab_title = '';
     if ($p_tab_title == 'Info') {
@@ -481,7 +603,7 @@ function print_tab($p_tab_title, $p_current_tab_title)
 }
 
 
-function print_tag_blocked_email($p_email_address, $p_removable = true)
+function se_print_tag_blocked_email($p_email_address, $p_removable = true)
 {  
     echo '<span class="pull-left padding-right-2 padding-bottom-2">
             <form id="form_' . $p_email_address . '" method="post" action="' . plugin_page('securityextend_edit') . '" title= "
@@ -501,7 +623,7 @@ function print_tag_blocked_email($p_email_address, $p_removable = true)
 }
 
 
-function print_tab_bar()
+function se_print_tab_bar()
 {
     $t_first_tab_title = plugin_lang_get('management_info_title');
     $t_current_tab = gpc_get_string('tab', null);
@@ -512,10 +634,10 @@ function print_tab_bar()
 
     echo '<ul class="nav nav-tabs padding-18" style="margin-top:5px;margin-left:5px;">' . "\n";
     
-    print_tab($t_first_tab_title, $t_current_tab);
-    print_tab(plugin_lang_get('management_block_account_title'), $t_current_tab);
-    print_tab(plugin_lang_get('management_block_bug_title'), $t_current_tab);
-    print_tab(plugin_lang_get('management_log_title'), $t_current_tab);
+    se_print_tab($t_first_tab_title, $t_current_tab);
+    se_print_tab(plugin_lang_get('management_block_account_title'), $t_current_tab);
+    se_print_tab(plugin_lang_get('management_block_bug_title'), $t_current_tab);
+    se_print_tab(plugin_lang_get('management_log_title'), $t_current_tab);
 
     echo '</ul>' . "\n<br />";
 
@@ -523,7 +645,7 @@ function print_tab_bar()
 }
 
 
-function print_textarea_section($p_field_name, $p_fa_icon = 'fa-bug')
+function se_print_textarea_section($p_field_name, $p_fa_icon = 'fa-bug')
 {
     $t_value = '';
     $query = "SELECT value FROM " . plugin_table('config') . " WHERE name='$p_field_name'";
@@ -535,11 +657,11 @@ function print_textarea_section($p_field_name, $p_fa_icon = 'fa-bug')
         $t_value = $row['value'];
     }
     $t_field = '<textarea name="' . $p_field_name . '" rows="5" spellcheck="true" style="width:100%" />' . $t_value . '</textarea>';
-    print_section($p_field_name, $t_field, $p_fa_icon);
+    se_print_section($p_field_name, $t_field, $p_fa_icon);
 }
 
 
-function save_config_value($p_config_name, $p_config_value)
+function se_save_config_value($p_config_name, $p_config_value)
 {
     $t_db_table = plugin_table('config');
     if ($p_config_name != 'block_account_email_address')

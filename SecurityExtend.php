@@ -15,7 +15,7 @@ class SecurityExtendPlugin extends MantisPlugin
         $this->description = plugin_lang_get("description");
         $this->page = 'config';
 
-        $this->version = "1.1.0";
+        $this->version = "1.2.0";
         $this->requires = array(
             "MantisCore" => "2.0.0",
         );
@@ -48,6 +48,10 @@ class SecurityExtendPlugin extends MantisPlugin
             'block_bug' => ON,
             'block_bugnote' => ON,
             'block_bug_duplicate' => ON,
+            'delete_user_on_antispam' => OFF,
+            'antispam_seconds' => 30,
+            'clean_on_antispam' => OFF,
+            'disable_user_on_custom_timer' => OFF,
             'show_bird_on_bug_block' => OFF
 		);
 	}
@@ -58,6 +62,7 @@ class SecurityExtendPlugin extends MantisPlugin
 		return array(
             'EVENT_MENU_MANAGE' => 'securityextend_menu',
             'EVENT_REPORT_BUG_DATA' => 'securityextend_bug_report',
+            'EVENT_BUGNOTE_DATA' => 'securityextend_bugnote_data',
             'EVENT_UPDATE_BUG_DATA' => 'securityextend_bug_update',
             'EVENT_MANAGE_USER_CREATE' => 'securityextend_user_create',
             'EVENT_CORE_HEADERS' => 'csp_headers'
@@ -84,37 +89,31 @@ class SecurityExtendPlugin extends MantisPlugin
 
     function securityextend_bug_report($p_event, $p_bug) 
     {
-        $t_user_id = auth_get_current_user_id();
-        $t_access_level = access_get_global_level($t_user_id);
-
-        if ($t_access_level <= config_get('default_new_account_access_level')) {
-            block_bug($p_bug);
-        }
-        
+        se_block_bug($p_bug);
         return $p_bug;
     }
     
 
     function securityextend_bug_update($p_event, $p_updated_bug, $p_existing_bug) 
     {
-        $t_access_level = access_get_global_level();
-
-        if ($t_access_level <= config_get('default_new_account_access_level')) {
-            block_bug($p_updated_bug);
-        }
-        
+        se_block_bug($p_updated_bug);
         return $p_updated_bug;
+    }
+
+
+    function securityextend_bugnote_data($p_bugnote_text, $p_bug_id )
+    {
+        se_block_bugnote($p_bugnote_text, $p_bug_id);
+        return $p_bugnote_text;
     }
 
 
     function securityextend_user_create($p_event, $p_user_id) 
     {
-        $t_access_level = access_get_global_level($p_user_id);
-        $t_new_account_access_level = config_get('default_new_account_access_level');
         $t_logged_in_user_access_level = access_get_global_level();
 
-        if ($t_logged_in_user_access_level == false || ($t_access_level <= $t_new_account_access_level && $t_logged_in_user_access_level < ADMINISTRATOR)) {
-            block_account($p_user_id);
+        if ($t_logged_in_user_access_level < ADMINISTRATOR) {
+            se_block_account($p_user_id);
         }
         
         return $p_user_id;
