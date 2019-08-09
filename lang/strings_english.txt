@@ -84,6 +84,10 @@ $s_plugin_SecurityExtend_management_log_antispam_count_disable_user_label = $s_p
 $s_plugin_SecurityExtend_management_log_antispam_count_disable_user_description = $s_plugin_SecurityExtend_management_antispam_count_disable_user_description;
 $s_plugin_SecurityExtend_management_log_antispam_count_delete_user_label = $s_plugin_SecurityExtend_management_antispam_count_delete_user_label;
 $s_plugin_SecurityExtend_management_log_antispam_count_delete_user_description = $s_plugin_SecurityExtend_management_antispam_count_delete_user_description;
+$s_plugin_SecurityExtend_management_log_antispam_count_delete_bug_label = 'AntiSpam Trigger &amp; Delete Bug';
+$s_plugin_SecurityExtend_management_log_antispam_count_delete_bug_description = 'AntiSpam Triggers - With deleted Bug';
+$s_plugin_SecurityExtend_management_log_antispam_count_delete_bugnote_label = 'AntiSpam Trigger &amp; Delete Bug Note';
+$s_plugin_SecurityExtend_management_log_antispam_count_delete_bugnote_description = 'AntiSpam Triggers - with deleted bug note';
 
 $s_plugin_SecurityExtend_disable_user = 'Disable User';
 $s_plugin_SecurityExtend_delete_user = 'Delete User';

@@ -108,6 +108,8 @@ echo '<div hidden title="' . plugin_lang_get('management_confirm_clear') . '" id
             se_print_log_section('block_bugnote_delete_user', $t_current_tab);
             se_print_log_section('antispam_count_disable_user', $t_current_tab);
             se_print_log_section('antispam_count_delete_user', $t_current_tab);
+            se_print_log_section('antispam_count_delete_bug', $t_current_tab);
+            se_print_log_section('antispam_count_delete_bugnote', $t_current_tab);
         }
 ?>
     </div>

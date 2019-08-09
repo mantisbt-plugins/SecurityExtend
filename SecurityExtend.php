@@ -52,7 +52,6 @@ class SecurityExtendPlugin extends MantisPlugin
             'antispam_action' => 'disable',
             'antispam_seconds' => 15,
             'clean_on_antispam' => OFF,
-            'disable_user_on_custom_timer' => OFF,
             'show_bird_on_bug_block' => OFF
 		);
 	}

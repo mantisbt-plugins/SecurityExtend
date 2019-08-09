@@ -93,16 +93,14 @@ function se_block_antispam_count($p_text = '')
         return;
     }
 
-	$t_antispam_max_event_count = config_get( 'antispam_max_event_count' );
-	$t_antispam_time_window_in_seconds = config_get( 'antispam_time_window_in_seconds' );
-
+	#$t_antispam_max_event_count = config_get( 'antispam_max_event_count' );
+	#$t_antispam_time_window_in_seconds = config_get( 'antispam_time_window_in_seconds' );
     #if( $t_antispam_max_event_count > 0 ) {
 	#	return;
     #}
 	#if(history_count_user_recent_events($t_antispam_time_window_in_seconds ) < $t_antispam_max_event_count ) {
     #
     #}
-
     if (history_count_user_recent_events(plugin_config_get('antispam_seconds')) >= 2) # if theres 2 events in the last X seconds
     {
         #
@@ -111,25 +109,28 @@ function se_block_antispam_count($p_text = '')
         $t_user_id = auth_get_current_user_id();
         $t_user_name = user_get_username($t_user_id);
         $t_user_email = user_get_email($t_user_id);
-        $t_user_antispam_action = plugin_config_get('antispam_action'); //'disable' or 'delete'
 
         #
-        # get all user tickets and notes and delete
+        # Get all user tickets and notes and delete
         #
-        # TODO
+        if (plugin_config_get('clean_on_antispam'))
+        {
+            se_delete_user_content($t_user_id, $t_user_name , $t_user_email);
+        }
 
         auth_logout();
         se_save_config_value('block_account_email_address', $t_user_email);
         
+        $t_user_antispam_action = plugin_config_get('antispam_action'); //'disable' or 'delete'
         if ($t_user_antispam_action == 'disable') 
         {
             user_set_field($t_user_id, 'enabled', 0);
-            se_log_event($t_user_name, $t_user_email, 'antipam_count_disable_user', $p_text);
+            se_log_event($t_user_name, $t_user_email, 'antispam_count_disable_user', $p_text);
         }
         else 
         {
             user_delete( $t_user_id );
-            se_log_event($t_user_name, $t_user_email, 'antipam_count_delete_user', $p_text);
+            se_log_event($t_user_name, $t_user_email, 'antispam_count_delete_user', $p_text);
         }
 
         if (!plugin_config_get('show_bird_on_bug_block')) {
@@ -297,6 +298,47 @@ function se_check_text($p_event_name, $p_regex, $p_text_kind, $p_text, $p_disabl
                 else {
                     print_header_redirect(plugin_page('thebird', true));
                 }
+            }
+        }
+    }
+}
+
+
+function se_delete_user_content($p_user_id, $p_user_name, $p_user_email)
+{
+    #
+    # Delete bugs
+    #
+    $t_bug_page_number = 1;
+    $t_bug_per_page = 25;
+    $t_bug_page_count = 0;
+    $t_bug_count = 0;
+    $t_filter = filter_create_reported_by(ALL_PROJECTS, $p_user_id);
+    $t_rows = filter_get_bug_rows($t_bug_page_number, $t_bug_per_page, $t_bug_page_count, $t_bug_count, $t_filter, ALL_PROJECTS, $p_user_id);
+    if ($t_rows != null) {
+        foreach ($t_rows as $t_bug) {
+            //bug_delete($t_bug->id);
+            se_log_event($p_user_name, $p_user_email, 'antispam_count_delete_bug', 'Deleted bug ' . $t_bug->id);
+        }
+    }
+
+    #
+    # Delete bugnotes
+    # 
+    $t_bug_page_number = 1;
+    $t_bug_per_page = 25;
+    $t_bug_page_count = 0;
+    $t_bug_count = 0;
+    $t_filter = filter_get_default();
+	$t_filter[FILTER_PROPERTY_NOTE_USER_ID] = array( '0' => $p_user_id );
+    $t_filter = filter_ensure_valid_filter($t_filter);
+    $t_rows = filter_get_bug_rows($t_bug_page_number, $t_bug_per_page, $t_bug_page_count, $t_bug_count, $t_filter, ALL_PROJECTS, $p_user_id);
+    if ($t_rows != null) {
+        foreach ($t_rows as $t_bug) {
+            $t_bugnotes = bugnote_get_all_bugnotes($t_bug->id);
+            foreach ($t_bugnotes as $t_bugnote) {
+                //bugnote_delete($t_bugnote->id);
+                se_log_event($p_user_name, $p_user_email, 'antispam_count_delete_bugnote', 'Deleted bugnote ' . $t_bugnote->id);
             }
         }
     }
