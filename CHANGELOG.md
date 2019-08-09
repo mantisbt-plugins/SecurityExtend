@@ -1,5 +1,16 @@
 # SECURITYEXTEND CHANGE LOG
 
+## Version 1.3.1 (August 9th, 2019)
+
+### Bug Fixes
+
+- include bugnote text in anti-spam block event log
+- setting the 'clean on anti-spam' option has no effect when an anti-spam event is triggered
+
+### Refactoring
+
+- add light plugin logging
+
 ## Version 1.3.0 (August 8th, 2019)
 
 ### Features
