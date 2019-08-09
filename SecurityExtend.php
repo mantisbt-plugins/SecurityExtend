@@ -106,7 +106,7 @@ class SecurityExtendPlugin extends MantisPlugin
     function securityextend_bugnote_data($p_event, $p_bugnote_text, $p_bug_id )
     {
         se_block_bugnote($p_bugnote_text, $p_bug_id);
-        se_block_antispam_count();
+        se_block_antispam_count($p_bugnote_text);
         return $p_bugnote_text;
     }
 
