@@ -1,5 +1,20 @@
 # SECURITYEXTEND CHANGE LOG
 
+## Version 1.3.0 (August 8th, 2019)
+
+### Features
+
+- add support for blocking bugnotes in the same manner as that of submitting and editing bugs.
+- add support for disabling/deleting user on a anti-spam trigger
+- make different actions more configurable in plugin settings
+- add info page content README.md and CHANGELOG.md using erusev/parsedown
+
+### Bug Fixes
+
+- markdown conversion doesnt create relative urls to screenshots correctly in info page
+- php include path is being filled with mutliple entries for core_path
+- tgz release package does not contain the plugin directory as the top level
+
 ## Version 1.2.0 (August 4th, 2019)
 
 ### Features
