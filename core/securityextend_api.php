@@ -48,11 +48,14 @@ function se_block_bug($p_bug)
 		return;
     }
     
+    if (plugin_config_get('block_bug') == OFF) {
+        return;
+    }
+
     se_block_bug_kind($p_bug, 'block_bug_delete_user');
     se_block_bug_kind($p_bug, 'block_bug_disable_user');
     se_block_bug_kind($p_bug, 'block_bug');
     se_block_bug_duplicates($p_bug);
-    se_block_antispam_count();
 }
 
 
@@ -66,16 +69,27 @@ function se_block_bugnote($p_bugnote_text, $p_bug_id)
 		return;
     }
     
+    if (plugin_config_get('block_bugnote') == OFF) {
+        return;
+    }
+
     se_block_bugnote_kind($p_bugnote_text, 'block_bug_delete_user');
     se_block_bugnote_kind($p_bugnote_text, 'block_bug_disable_user');
     se_block_bugnote_kind($p_bugnote_text, 'block_bug');
-    se_block_antispam_count($p_bugnote_text);
 }
 
 
 function se_block_antispam_count($p_text = '') 
 {
-    if (plugin_config_get('disable_user_on_antispam') == OFF) {
+    if( !auth_signup_enabled() ) {
+		return;
+	}
+
+	if( access_get_global_level() > auth_signup_access_level() ) {
+		return;
+    }
+    
+    if (plugin_config_get('use_antispam_handler') == OFF) {
         return;
     }
 
@@ -89,7 +103,7 @@ function se_block_antispam_count($p_text = '')
     #
     #}
 
-    if (history_count_user_recent_events(plugin_config_get('antispam_seconds')) >= 2) # if theres 2 events in the last 30 seconds, its a spammer
+    if (history_count_user_recent_events(plugin_config_get('antispam_seconds')) >= 2) # if theres 2 events in the last X seconds
     {
         #
         # If we are here, the spam count max has triggered
@@ -97,7 +111,7 @@ function se_block_antispam_count($p_text = '')
         $t_user_id = auth_get_current_user_id();
         $t_user_name = user_get_username($t_user_id);
         $t_user_email = user_get_email($t_user_id);
-        $t_delete_user = plugin_config_get('delete_user_on_antispam'); // or delete
+        $t_user_antispam_action = plugin_config_get('antispam_action'); //'disable' or 'delete'
 
         #
         # get all user tickets and notes and delete
@@ -107,7 +121,7 @@ function se_block_antispam_count($p_text = '')
         auth_logout();
         se_save_config_value('block_account_email_address', $t_user_email);
         
-        if (!$t_delete_user) 
+        if ($t_user_antispam_action == 'disable') 
         {
             user_set_field($t_user_id, 'enabled', 0);
             se_log_event($t_user_name, $t_user_email, 'antipam_count_disable_user', $p_text);
@@ -140,7 +154,6 @@ function se_block_bug_duplicates($p_bug)
     $t_bug_count = 0;
 
     $t_rows = filter_get_bug_rows($t_bug_page_number, $t_bug_per_page, $t_bug_page_count, $t_bug_count);
-    //$t_rows = mc_filter_get_issues('', '', 0, 0, 1, 10);
 	if ($t_rows != null) 
 	{
 		$t_user_id = auth_get_current_user_id();
@@ -270,7 +283,7 @@ function se_check_text($p_event_name, $p_regex, $p_text_kind, $p_text, $p_disabl
                 if ($p_disable_user) 
                 {
                     user_set_field($t_user_id, 'enabled', 0);
-                    se_log_event($t_user_name, $t_user_email, $p_event_name . 'block_bug_disable_user', $p_text_kind, $p_text);
+                    se_log_event($t_user_name, $t_user_email, $p_event_name . '_disable_user', $p_text_kind, $p_text);
                 }
                 else 
                 {

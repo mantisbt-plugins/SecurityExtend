@@ -48,8 +48,9 @@ class SecurityExtendPlugin extends MantisPlugin
             'block_bug' => ON,
             'block_bugnote' => ON,
             'block_bug_duplicate' => ON,
-            'delete_user_on_antispam' => OFF,
-            'antispam_seconds' => 30,
+            'use_antispam_handler' => OFF,
+            'antispam_action' => 'disable',
+            'antispam_seconds' => 15,
             'clean_on_antispam' => OFF,
             'disable_user_on_custom_timer' => OFF,
             'show_bird_on_bug_block' => OFF
@@ -90,6 +91,7 @@ class SecurityExtendPlugin extends MantisPlugin
     function securityextend_bug_report($p_event, $p_bug) 
     {
         se_block_bug($p_bug);
+        se_block_antispam_count();
         return $p_bug;
     }
     
@@ -97,6 +99,7 @@ class SecurityExtendPlugin extends MantisPlugin
     function securityextend_bug_update($p_event, $p_updated_bug, $p_existing_bug) 
     {
         se_block_bug($p_updated_bug);
+        se_block_antispam_count();
         return $p_updated_bug;
     }
 
@@ -104,6 +107,7 @@ class SecurityExtendPlugin extends MantisPlugin
     function securityextend_bugnote_data($p_event, $p_bugnote_text, $p_bug_id )
     {
         se_block_bugnote($p_bugnote_text, $p_bug_id);
+        se_block_antispam_count();
         return $p_bugnote_text;
     }
 

@@ -35,7 +35,7 @@ $block_bugnote = plugin_config_get('block_bugnote');
 								<table class="table table-bordered table-condensed table-striped">
 									<fieldset>
 										<tr <?php echo helper_alternate_class() ?>>
-											<td class="category" width="250">
+											<td class="category" width="350">
 												<?php echo lang_get('custom_field_access_level_r') ?>
 											</td>
 											<td>
@@ -45,7 +45,7 @@ $block_bugnote = plugin_config_get('block_bugnote');
 											</td>
 										</tr>
 										<tr <?php echo helper_alternate_class() ?>>
-											<td class="category" width="250">
+											<td class="category" width="380">
 												<?php echo lang_get('custom_field_access_level_rw') ?>
 											</td>
 											<td>
@@ -55,7 +55,23 @@ $block_bugnote = plugin_config_get('block_bugnote');
 											</td>
 										</tr>
 										<tr <?php echo helper_alternate_class() ?>>
-											<td class="category" width="250">
+											<td class="category" width="380">
+												<?php echo plugin_lang_get('config_block_bug'); ?><br>
+											</td>
+											<td>
+												<input type="checkbox" name="block_bug" <?php if (plugin_config_get('block_bug', ON) == ON) echo ' checked="checked"' ?> />
+											</td>
+										</tr>
+										<tr <?php echo helper_alternate_class() ?>>
+											<td class="category" width="380">
+												<?php echo plugin_lang_get('config_block_bugnote'); ?><br>
+											</td>
+											<td>
+												<input type="checkbox" name="block_bugnote" <?php if (plugin_config_get('block_bugnote', ON) == ON) echo ' checked="checked"' ?> />
+											</td>
+										</tr>
+										<tr <?php echo helper_alternate_class() ?>>
+											<td class="category" width="380">
 												<?php echo plugin_lang_get('config_block_bug_duplicate'); ?><br>
 												<span class="required"> * <?php echo plugin_lang_get('config_block_bug_duplicate_note') ?></span>
 											</td>
@@ -64,16 +80,27 @@ $block_bugnote = plugin_config_get('block_bugnote');
 											</td>
 										</tr>
 										<tr <?php echo helper_alternate_class() ?>>
-											<td class="category" width="250">
-												<?php echo plugin_lang_get('config_disable_user_on_antispam'); ?><br>
-												<span class="required"> * <?php echo plugin_lang_get('config_disable_user_on_antispam_note') ?></span>
+											<td class="category" width="380">
+												<?php echo plugin_lang_get('config_use_antispam_handler'); ?><br>
+												<span class="required"> * <?php echo plugin_lang_get('config_use_antispam_handler_note') ?></span>
 											</td>
 											<td>
-												<input type="checkbox" name="disable_user_on_antispam" <?php if (plugin_config_get('disable_user_on_antispam', ON) == ON) echo ' checked="checked"' ?> />
+												<input type="checkbox" name="use_antispam_handler" <?php if (plugin_config_get('use_antispam_handler', ON) == ON) echo ' checked="checked"' ?> />
 											</td>
 										</tr>
 										<tr <?php echo helper_alternate_class() ?>>
-											<td class="category" width="250">
+											<td class="category" width="380">
+												<?php echo plugin_lang_get('config_user_action_on_antispam'); ?><br>
+											</td>
+											<td>
+												<select name="antispam_action"><?php echo plugin_config_get('antispam_seconds', 15) ?>
+													<option value="disable" <?php if (plugin_config_get('antispam_action', 'disable') == 'disable') echo ' selected' ?> /><?php echo plugin_lang_get('disable_user') ?></option>
+													<option value="delete" <?php if (plugin_config_get('antispam_action', 'disable') == 'delete') echo ' selected' ?> /><?php echo plugin_lang_get('delete_user') ?></option>
+												</select>
+											</td>
+										</tr>
+										<tr <?php echo helper_alternate_class() ?>>
+											<td class="category" width="380">
 												<?php echo plugin_lang_get('config_clean_on_antispam'); ?><br>
 												<span class="required"> * <?php echo plugin_lang_get('config_clean_on_antispam_note') ?></span>
 											</td>
@@ -82,7 +109,16 @@ $block_bugnote = plugin_config_get('block_bugnote');
 											</td>
 										</tr>
 										<tr <?php echo helper_alternate_class() ?>>
-											<td class="category" width="250">
+											<td class="category" width="380">
+												<?php echo plugin_lang_get('config_antispam_seconds'); ?><br>
+												<span class="required"> * <?php echo plugin_lang_get('config_antispam_seconds_note') ?></span>
+											</td>
+											<td>
+												<input name="antispam_seconds" maxLength="3" value="<?php echo plugin_config_get('antispam_seconds', 15) ?>" />
+											</td>
+										</tr>
+										<tr <?php echo helper_alternate_class() ?>>
+											<td class="category" width="380">
 												<?php echo plugin_lang_get('config_show_bird_on_bug_block'); ?><br>
 												<span class="required"> * <?php echo plugin_lang_get('config_show_bird_on_bug_block_note') ?></span>
 											</td>

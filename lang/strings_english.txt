@@ -7,12 +7,17 @@ $s_plugin_SecurityExtend_description = 'Add some additional security to MantisBT
 
 $s_plugin_SecurityExtend_config = 'Configuration';
 $s_plugin_SecurityExtend_update_config = 'Update Configuration';
+$s_plugin_SecurityExtend_config_block_bug = 'Use bug block handler';
+$s_plugin_SecurityExtend_config_block_bugnote = 'Use bugnote block handler';
 $s_plugin_SecurityExtend_config_block_bug_duplicate_note = 'Will disable user account on block';
 $s_plugin_SecurityExtend_config_block_bug_duplicate = 'Block duplicate summary/description';
-$s_plugin_SecurityExtend_config_disable_user_on_antispam = 'Disable User on Antispam trigger';
-$s_plugin_SecurityExtend_config_disable_user_on_antispam_note = 'Uses anti-spam setting in config_inc.php';
+$s_plugin_SecurityExtend_config_use_antispam_handler = 'Use Anti-spam trigger handler';
+$s_plugin_SecurityExtend_config_use_antispam_handler_note = 'Will disable or delete a user on anti-spam trigger';
+$s_plugin_SecurityExtend_config_user_action_on_antispam = 'Action to perform on anti-spam trigger';
 $s_plugin_SecurityExtend_config_clean_on_antispam = 'Clean on Antispam trigger';
 $s_plugin_SecurityExtend_config_clean_on_antispam_note = 'Deletes all user reported bugs and bugnotes';
+$s_plugin_SecurityExtend_config_antispam_seconds = 'Anti-spam Seconds';
+$s_plugin_SecurityExtend_config_antispam_seconds_note = '# of seconds to give for two requests to trigger the anti-spam handler';
 $s_plugin_SecurityExtend_config_show_bird_on_bug_block = 'Show bird on bug block';
 $s_plugin_SecurityExtend_config_show_bird_on_bug_block_note = 'On disable or delete account';
 $s_plugin_SecurityExtend_show_bird_on_bug_block_label = 'See ya...';
@@ -79,3 +84,6 @@ $s_plugin_SecurityExtend_management_log_antispam_count_disable_user_label = $s_p
 $s_plugin_SecurityExtend_management_log_antispam_count_disable_user_description = $s_plugin_SecurityExtend_management_antispam_count_disable_user_description;
 $s_plugin_SecurityExtend_management_log_antispam_count_delete_user_label = $s_plugin_SecurityExtend_management_antispam_count_delete_user_label;
 $s_plugin_SecurityExtend_management_log_antispam_count_delete_user_description = $s_plugin_SecurityExtend_management_antispam_count_delete_user_description;
+
+$s_plugin_SecurityExtend_disable_user = 'Disable User';
+$s_plugin_SecurityExtend_delete_user = 'Delete User';
