@@ -80,14 +80,15 @@ function se_block_antispam_count($p_text = '')
     }
 
 	$t_antispam_max_event_count = config_get( 'antispam_max_event_count' );
-	if( $t_antispam_max_event_count == 0 ) {
-		return;
-	}
+	$t_antispam_time_window_in_seconds = config_get( 'antispam_time_window_in_seconds' );
 
-	# Make sure user has at least one more event to add before exceeding the limit, which will happen
-	# after this method returns.
-	#$t_antispam_time_window_in_seconds = config_get( 'antispam_time_window_in_seconds' );
+    #if( $t_antispam_max_event_count > 0 ) {
+	#	return;
+    #}
 	#if(history_count_user_recent_events($t_antispam_time_window_in_seconds ) < $t_antispam_max_event_count ) {
+    #
+    #}
+
     if (history_count_user_recent_events(plugin_config_get('antispam_seconds')) >= 2) # if theres 2 events in the last 30 seconds, its a spammer
     {
         #
@@ -104,7 +105,7 @@ function se_block_antispam_count($p_text = '')
         # TODO
 
         auth_logout();
-        save_config_value('block_account_email_address', $t_user_email);
+        se_save_config_value('block_account_email_address', $t_user_email);
         
         if (!$t_delete_user) 
         {
@@ -264,7 +265,7 @@ function se_check_text($p_event_name, $p_regex, $p_text_kind, $p_text, $p_disabl
             {
                 auth_logout();
 
-                save_config_value('block_account_email_address', $t_user_email);
+                se_save_config_value('block_account_email_address', $t_user_email);
                 
                 if ($p_disable_user) 
                 {

@@ -1,7 +1,6 @@
 <?php
 
 require_once('core.php');
-require_once('filter_api.php');
 require_once('securityextend_api.php');
 require_once('parsedown.php');
 require_once('parsedown-toc.php');
