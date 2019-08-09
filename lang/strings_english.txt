@@ -58,6 +58,7 @@ $s_plugin_SecurityExtend_management_block_account_domain_label = 'Account Block 
 $s_plugin_SecurityExtend_management_block_account_domain_description = 'A comma separated list of email domains that accounts cannot be created with';
 $s_plugin_SecurityExtend_management_block_account_blocked_email_label = 'Account Block Email Addresses';
 $s_plugin_SecurityExtend_management_block_account_blocked_email_description = 'Blacklisted/blocked email addresses due to Bug Block rule or manual addition.  Click to remove.';
+$s_plugin_SecurityExtend_management_block_account_remove_email = 'Remove email address from blocked list';
 
 $s_plugin_SecurityExtend_management_log_title = 'Log';
 $s_plugin_SecurityExtend_management_log_clear= 'Clear';
