@@ -15,6 +15,9 @@ function se_block_account($p_user_id)
     
     if (se_is_email_forbidden($t_user_email))
     {
+        log_event(LOG_PLUGIN, "SecurityExtend: Forbidden email: %s", $t_user_email);
+        log_event(LOG_PLUGIN, "SecurityExtend: Delete userid: %d", (int)$p_user_id);
+
         user_delete( $p_user_id );
 
         $t_email_id_queue = email_queue_get_ids();
@@ -110,6 +113,9 @@ function se_block_antispam_count($p_text = '')
         $t_user_name = user_get_username($t_user_id);
         $t_user_email = user_get_email($t_user_id);
 
+        log_event(LOG_PLUGIN, "SecurityExtend: Anti-spam trigger email: %s", $t_user_email);
+        log_event(LOG_PLUGIN, "SecurityExtend: Anti-spam trigger username: %s", $t_user_name);
+
         #
         # Get all user tickets and notes and delete
         #
@@ -126,11 +132,13 @@ function se_block_antispam_count($p_text = '')
         {
             user_set_field($t_user_id, 'enabled', 0);
             se_log_event($t_user_name, $t_user_email, 'antispam_count_disable_user', $p_text);
+            log_event(LOG_PLUGIN, "SecurityExtend: Disable userid: %d", $t_user_id);
         }
         else 
         {
             user_delete( $t_user_id );
             se_log_event($t_user_name, $t_user_email, 'antispam_count_delete_user', $p_text);
+            log_event(LOG_PLUGIN, "SecurityExtend: Delete userid: %d", $t_user_id);
         }
 
         if (!plugin_config_get('show_bird_on_bug_block')) {
@@ -150,7 +158,7 @@ function se_block_bug_duplicates($p_bug)
     }
     
     $t_bug_page_number = 1;
-    $t_bug_per_page = 10;
+    $t_bug_per_page = 25;
     $t_bug_page_count = 1;
     $t_bug_count = 0;
 
@@ -306,6 +314,8 @@ function se_check_text($p_event_name, $p_regex, $p_text_kind, $p_text, $p_disabl
 
 function se_delete_user_content($p_user_id, $p_user_name, $p_user_email)
 {
+    log_event(LOG_PLUGIN, "SecurityExtend: Delete user content");
+    
     #
     # Delete bugs
     #
@@ -317,8 +327,9 @@ function se_delete_user_content($p_user_id, $p_user_name, $p_user_email)
     $t_rows = filter_get_bug_rows($t_bug_page_number, $t_bug_per_page, $t_bug_page_count, $t_bug_count, $t_filter, ALL_PROJECTS, $p_user_id);
     if ($t_rows != null) {
         foreach ($t_rows as $t_bug) {
-            //bug_delete($t_bug->id);
+            bug_delete($t_bug->id);
             se_log_event($p_user_name, $p_user_email, 'antispam_count_delete_bug', 'Deleted bug ' . $t_bug->id);
+            log_event(LOG_PLUGIN, "SecurityExtend: Delete bug %d", $t_bug->id);
         }
     }
 
@@ -337,8 +348,9 @@ function se_delete_user_content($p_user_id, $p_user_name, $p_user_email)
         foreach ($t_rows as $t_bug) {
             $t_bugnotes = bugnote_get_all_bugnotes($t_bug->id);
             foreach ($t_bugnotes as $t_bugnote) {
-                //bugnote_delete($t_bugnote->id);
+                bugnote_delete($t_bugnote->id);
                 se_log_event($p_user_name, $p_user_email, 'antispam_count_delete_bugnote', 'Deleted bugnote ' . $t_bugnote->id);
+                log_event(LOG_PLUGIN, "SecurityExtend: Delete bugnote %d", $t_bugnote->id);
             }
         }
     }
@@ -661,7 +673,7 @@ function se_print_tab($p_tab_title, $p_current_tab_title)
 
 function se_print_tag_blocked_email($p_email_address, $p_removable = true)
 {  
-    echo '<span class="pull-left padding-right-2 padding-bottom-2">
+    echo '<span class="pull-left padding-right-2 padding-bottom-2" title="' . plugin_lang_get('management_block_account_remove_email') . '">
             <form id="form_' . $p_email_address . '" method="post" action="' . plugin_page('securityextend_edit') . '" title= "
                 ' . ($p_removable ? lang_get('delete_link') . ' ' : '') . '" class="form-inline">
                 ' . form_security_field('plugin_SecurityExtend_securityextend_edit') . '
