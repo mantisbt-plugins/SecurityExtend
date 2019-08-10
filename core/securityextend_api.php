@@ -285,6 +285,14 @@ function se_check_text($p_event_name, $p_regex, $p_text_kind, $p_text, $p_disabl
             }
             else 
             {
+                #
+                # Get all user tickets and notes and delete
+                #
+                #if (plugin_config_get('clean_on_antispam'))
+                #{
+                #    se_delete_user_content($t_user_id, $t_user_name , $t_user_email);
+                #}
+
                 auth_logout();
 
                 se_save_config_value('block_account_email_address', $t_user_email);
