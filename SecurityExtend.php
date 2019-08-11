@@ -15,7 +15,7 @@ class SecurityExtendPlugin extends MantisPlugin
         $this->description = plugin_lang_get("description");
         $this->page = 'config';
 
-        $this->version = "1.3.1";
+        $this->version = "1.3.2";
         $this->requires = array(
             "MantisCore" => "2.0.0",
         );

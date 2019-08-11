@@ -1,5 +1,11 @@
 # SECURITYEXTEND CHANGE LOG
 
+## Version 1.3.2 (August 11st, 2019)
+
+### Bug Fixes
+
+- installing plugin causes new account notification email to not get sent to admins
+
 ## Version 1.3.1 (August 9th, 2019)
 
 ### Bug Fixes
