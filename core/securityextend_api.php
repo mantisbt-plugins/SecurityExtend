@@ -9,11 +9,7 @@ function se_block_account($p_user_id)
 		return;
 	}
 
-	if( access_get_global_level() > auth_signup_access_level() ) {
-		return;
-    }
-    
-    if (se_is_email_forbidden($t_user_email))
+	if (se_is_email_forbidden($t_user_email))
     {
         log_event(LOG_PLUGIN, "SecurityExtend: Forbidden email: %s", $t_user_email);
         log_event(LOG_PLUGIN, "SecurityExtend: Delete userid: %d", (int)$p_user_id);

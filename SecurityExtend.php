@@ -113,13 +113,7 @@ class SecurityExtendPlugin extends MantisPlugin
 
     function securityextend_user_create($p_event, $p_user_id) 
     {
-        $t_logged_in_user_access_level = access_get_global_level();
-
-        if ($t_logged_in_user_access_level < ADMINISTRATOR) {
-            se_block_account($p_user_id);
-        }
-        
-        return $p_user_id;
+        se_block_account($p_user_id);
     }
 
 
